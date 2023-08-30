@@ -1,6 +1,7 @@
 package tradingEngine.gameData;
 
 public enum Specie {
+    MISSINGNO(-1),
     RHYDON(1),
     KANGASKHAN(2),
     NIDORAN_M(3),
@@ -157,6 +158,16 @@ public enum Specie {
 
     private Specie(int index){
         this.index = index;
+    }
+
+    public static Specie specieFromIndex(int index){
+        for(int i = 0; i < Specie.values().length; i++){
+            Specie current_specie = Specie.values()[i];
+            if(current_specie.index == index){
+                return current_specie;
+            }
+        }
+        return MISSINGNO;
     }
 }
 
