@@ -1,5 +1,11 @@
 package tradingEngine.gameData;
 
+import tradingEngine.gameData.strings.InGameString;
+import tradingEngine.gameData.strings.JapaneseString;
+import tradingEngine.gameData.strings.WesternString;
+
+import java.util.Collection;
+
 public class Pokemon {
     private Specie specie;
     private int currentHp;
@@ -33,8 +39,53 @@ public class Pokemon {
         this.stats = stats;
     }
 
-    public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, boolean japanese){
-        //Parse trainer name and nickname
+    public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, boolean japanese) {
+        int trainerNameLength = InGameString.stringLength(trainerName);
+        int nicknameLength = InGameString.stringLength(nickname);
+
+
+        if(japanese){
+            if(trainerNameLength > 6){
+                throw new SizeLimitExceededException("trainerName is too long");
+            }
+            if(nicknameLength > 6){
+                throw new SizeLimitExceededException("nickname is too long");
+            }
+        }
+
+        else{
+            if(trainerNameLength > 8){
+                throw new SizeLimitExceededException("trainerName is too long");
+            }
+            if(nicknameLength > 11){
+                throw new SizeLimitExceededException("nickname is too long");
+            }
+        }
+
+        // Beyond this point, nickname and trainer name have normal sizes
+
+        if(japanese){
+            this.trainerName = new JapaneseString();
+            this.nickname = new JapaneseString();
+        }
+        else{
+            this.trainerName = new WesternString();
+            this.nickname = new WesternString();
+        }
+
+        try{
+            this.trainerName.addAll(trainerName);
+        }
+        catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("illegal character in trainerName");
+        }
+
+        try{
+            this.nickname.addAll(nickname);
+        }
+        catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("illegal character in nickname");
+        }
 
         //TODO parse pokemon data
     }
