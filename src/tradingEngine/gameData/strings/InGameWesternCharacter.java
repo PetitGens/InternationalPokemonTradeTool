@@ -75,10 +75,10 @@ public enum InGameWesternCharacter {
     FEMALE((byte) 0xF5, '*'),
     ;
 
-    public int value;
-    public char character;
+    public final int value;
+    public final char character;
 
-    private InGameWesternCharacter(byte value, char character){
+    InGameWesternCharacter(byte value, char character){
         this.value = value;
         this.character = character;
     }

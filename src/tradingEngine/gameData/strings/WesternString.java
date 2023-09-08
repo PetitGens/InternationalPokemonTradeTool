@@ -1,15 +1,13 @@
 package tradingEngine.gameData.strings;
 
 public class WesternString extends InGameString{
+
+
+
     @Override
-    public void add(byte character) {
+    public boolean isCharacterValid(byte character) {
         InGameWesternCharacter westChar = InGameWesternCharacter.characterFromValue(character);
-        if (westChar == null){
-            throw new IllegalArgumentException(String.format("illegal character for Western game : %x", character));
-        }
-        array[length] = character;
-        array[length + 1] = 0x50;
-        length++;
+        return westChar != null;
     }
 
     @Override

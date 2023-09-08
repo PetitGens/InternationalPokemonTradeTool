@@ -10,7 +10,17 @@ public abstract class InGameString  {
     protected byte[] array = new byte[MAX_SIZE];
     protected int length = 0;
 
-    public abstract void add(byte character);
+    public void add(byte character){
+        if(isCharacterValid(character)){
+            array[length] = character;
+            array[length + 1] = 0x50;
+            length++;
+        }
+        throw new IllegalArgumentException(String.format("illegal character for Western game : %x", character));
+    }
+
+    public abstract boolean isCharacterValid(byte character);
+
     public abstract void addAll(byte[] array);
 
     public void remove(int index){
@@ -55,5 +65,16 @@ public abstract class InGameString  {
             }
         }
         throw new IllegalArgumentException("this string has no delimiter character");
+    }
+
+    public byte[] toArray(){
+        byte[] newArray = new byte[array.length];
+        int i = 0;
+        while(i < array.length && array[i] != 0x50){
+            newArray[i] = array[i];
+            i++;
+        }
+        newArray[i] = 0x50;
+        return newArray;
     }
 }

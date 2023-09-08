@@ -4,8 +4,6 @@ import tradingEngine.gameData.strings.InGameString;
 import tradingEngine.gameData.strings.JapaneseString;
 import tradingEngine.gameData.strings.WesternString;
 
-import java.util.Collection;
-
 public class Pokemon {
     private Specie specie;
     private int currentHp;
@@ -42,7 +40,6 @@ public class Pokemon {
     public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, boolean japanese) {
         int trainerNameLength = InGameString.stringLength(trainerName);
         int nicknameLength = InGameString.stringLength(nickname);
-
 
         if(japanese){
             if(trainerNameLength > 6){
