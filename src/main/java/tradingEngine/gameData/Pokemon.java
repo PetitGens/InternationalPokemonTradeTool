@@ -1,8 +1,8 @@
-package tradingEngine.gameData;
+package main.java.tradingEngine.gameData;
 
-import tradingEngine.gameData.strings.InGameString;
-import tradingEngine.gameData.strings.JapaneseString;
-import tradingEngine.gameData.strings.WesternString;
+import main.java.tradingEngine.gameData.strings.JapaneseString;
+import main.java.tradingEngine.gameData.strings.InGameString;
+import main.java.tradingEngine.gameData.strings.WesternString;
 
 public class Pokemon {
     private Specie specie;

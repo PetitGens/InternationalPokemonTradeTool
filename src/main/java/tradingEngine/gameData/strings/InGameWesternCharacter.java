@@ -1,4 +1,4 @@
-package tradingEngine.gameData.strings;
+package main.java.tradingEngine.gameData.strings;
 
 public enum InGameWesternCharacter {
     DELIMITER((byte) 0x50, '\0'),
@@ -67,15 +67,15 @@ public enum InGameWesternCharacter {
     QUESTION_MARK((byte) 0xE6, '?'),
     EXCLAMATION_POINT((byte) 0xE7, '!'),
     POINT((byte) 0xE8, '.'),
-    MALE((byte) 0xEF, '*'),
+    MALE((byte) 0xEF, '♂'),
     MULTIPLICATION_SIGN((byte) 0xF1, 'x'),
     POINT2((byte) 0xF2, '.'),
     SLASH((byte) 0xF3, '/'),
     COMMA((byte) 0xF4, ','),
-    FEMALE((byte) 0xF5, '*'),
+    FEMALE((byte) 0xF5, '♀'),
     ;
 
-    public final int value;
+    public final byte value;
     public final char character;
 
     InGameWesternCharacter(byte value, char character){

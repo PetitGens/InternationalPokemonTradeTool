@@ -1,4 +1,4 @@
-package tradingEngine.gameData;
+package main.java.tradingEngine.gameData;
 
 public class SizeLimitExceededException extends IllegalArgumentException{
     public SizeLimitExceededException() {

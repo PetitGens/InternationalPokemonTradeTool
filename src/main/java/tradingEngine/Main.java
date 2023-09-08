@@ -1,4 +1,6 @@
-import tradingEngine.gameData.strings.WesternString;
+package main.java.tradingEngine;
+
+import main.java.tradingEngine.gameData.strings.WesternString;
 
 import java.util.Scanner;
 

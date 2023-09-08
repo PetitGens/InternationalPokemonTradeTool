@@ -1,4 +1,4 @@
-package tradingEngine.gameData.strings;
+package main.java.tradingEngine.gameData.strings;
 
 public enum InGameJapaneseCharacter {
     DELIMITER((byte) 0x50, '\0'),
@@ -41,7 +41,7 @@ public enum InGameJapaneseCharacter {
     HIRAGANA_YU((byte) 0xD5, 'ゆ'),
     HIRAGANA_YO((byte) 0xD6, 'よ'),
     HIRAGANA_RA((byte) 0xD7, 'ら'),
-    HIRAGANA_RI((byte) 0xD8, 'り'),
+    HIRAGANA_RI((byte) 0xD8, 'リ'),
     HIRAGANA_RU((byte) 0xD9, 'る'),
     HIRAGANA_RE((byte) 0xDA, 'れ'),
     HIRAGANA_RO((byte) 0xDB, 'ろ'),
@@ -74,6 +74,10 @@ public enum InGameJapaneseCharacter {
     HIRAGANA_PU((byte) 0x46, 'ぷ'),
     HIRAGANA_PE((byte) 0x47, 'ぺ'),
     HIRAGANA_PO((byte) 0x48, 'ぽ'),
+    HIRAGANA_SMALL_TSU((byte) 0xDF, 'っ'),
+    HIRAGANA_SMALL_YA((byte) 0xE0, 'ゃ'),
+    HIRAGANA_SMALL_YU((byte) 0xE1, 'ゅ'),
+    HIRAGANA_SMALL_YO((byte) 0XE2, 'ょ'),
 
     KATAKANA_A((byte) 0x80, 'ア'),
     KATAKANA_I((byte) 0x81, 'イ'),
@@ -114,13 +118,12 @@ public enum InGameJapaneseCharacter {
     KATAKANA_YU((byte) 0xA3, 'ユ'),
     KATAKANA_YO((byte) 0xA4, 'ヨ'),
     KATAKANA_RA((byte) 0xA5, 'ラ'),
-    KATAKANA_RI((byte) 0xA6, 'リ'),
-    KATAKANA_RU((byte) 0xA7, 'ル'),
-    KATAKANA_RE((byte) 0xA8, 'レ'),
-    KATAKANA_RO((byte) 0xA9, 'ロ'),
-    KATAKANA_WA((byte) 0xAA, 'ワ'),
-    KATAKANA_WO((byte) 0xAB, 'ヲ'),
-    KATAKANA_N((byte) 0xAC, 'ン'),
+    KATAKANA_RU((byte) 0xA6, 'ル'),
+    KATAKANA_RE((byte) 0xA7, 'レ'),
+    KATAKANA_RO((byte) 0xA8, 'ロ'),
+    KATAKANA_WA((byte) 0xA9, 'ワ'),
+    KATAKANA_WO((byte) 0xAA, 'ヲ'),
+    KATAKANA_N((byte) 0xAB, 'ン'),
 
     KATAKANA_GA((byte) 0x5, 'ガ'),
     KATAKANA_GI((byte) 0x6, 'ギ'),
@@ -147,6 +150,11 @@ public enum InGameJapaneseCharacter {
     KATAKANA_PU((byte) 0x42, 'プ'),
     KATAKANA_PE((byte) 0x47, 'ペ'),
     KATAKANA_PO((byte) 0x43, 'ポ'),
+    KATAKANA_SMALL_TSU((byte) 0xAC, 'ッ'),
+    KATAKANA_SMALL_YA((byte) 0xAD, 'ャ'),
+    KATAKANA_SMALL_YU((byte) 0xAE, 'ュ'),
+    KATAKANA_SMALL_YO((byte) 0xAF, 'ョ'),
+    CHOONPU((byte) 0xE3, 'ー'),
 
     ;
     public final byte value;

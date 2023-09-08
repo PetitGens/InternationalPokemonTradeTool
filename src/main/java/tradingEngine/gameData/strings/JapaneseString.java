@@ -1,4 +1,4 @@
-package tradingEngine.gameData.strings;
+package main.java.tradingEngine.gameData.strings;
 
 public class JapaneseString extends InGameString{
     @Override
@@ -12,9 +12,11 @@ public class JapaneseString extends InGameString{
         if(array.length > 11){
             throw new IllegalArgumentException("array size is too big, it should not be greater than 11");
         }
+        
+        int arraySize = array.length;
 
         int i = 0;
-        while(array[i] != InGameJapaneseCharacter.DELIMITER.value){
+        while(i < arraySize && array[i] != InGameJapaneseCharacter.DELIMITER.value){
             InGameJapaneseCharacter japChar = InGameJapaneseCharacter.characterFromValue(array[i]);
             if (japChar == null){
                 throw new IllegalArgumentException(String.format("illegal character for Japanese game game : %x", array[i]));
@@ -23,8 +25,13 @@ public class JapaneseString extends InGameString{
             this.array[i] = array[i];
             i++;
         }
+
+        if(i == 11){
+            i = 10;
+        }
+
         this.array[i] = 0x50;
-        length = i - 1;
+        length = i;
     }
 
     @Override
