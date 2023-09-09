@@ -1,5 +1,7 @@
 package main.java.tradingEngine.gameData.strings;
 
+import main.java.tradingEngine.gameData.Bytes;
+
 /**
  * A character string in a special encoding depending on the language of the game.
  * It has a size limit of 10 useful characters since no in-game strings used in this program should be longer than that.
@@ -122,16 +124,6 @@ public abstract class InGameString {
     public abstract void fromString(String string);
 
     /**
-     * Convert a byte value (which is signed) to an unsigned 8 bits value stored in an int.
-     * (mostly for displaying, maths or comparisons)
-     * @param value -> the signed value to convert
-     * @return the converted unsigned value
-     */
-    public static int byteToUnsignedByte(byte value){
-        return (int) value & 0xff;
-    }
-
-    /**
      * Returns the number of characters in the given array (excluding delimiter). It's mostly made for strings that
      * contains a 0x50 delimiter, as otherwise it just returns the length of the array.
      * @param string -> An array of encoded characters that the method will count.
@@ -140,7 +132,7 @@ public abstract class InGameString {
     public static int stringLength(byte[] string){
         int i;
         for(i = 0; i < string.length; i++){
-            if(byteToUnsignedByte(string[i]) == 0x50){
+            if(Bytes.byteToUnsignedByte(string[i]) == 0x50){
                 return i;
             }
         }

@@ -6,8 +6,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        char truc = 'あ';
+        byte truc = (byte) 0x80;
+
+        int truc2 = truc;
+
         System.out.println(truc);
+        System.out.println(truc2);
     }
 
     public static void inGameStringTesting(){
