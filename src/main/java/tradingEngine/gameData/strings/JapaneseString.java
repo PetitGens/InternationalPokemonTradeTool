@@ -1,5 +1,10 @@
 package main.java.tradingEngine.gameData.strings;
 
+/**
+ * A character string in a special encoding used in Japanese Gen 1/2 Pokémon games.
+ * @see InGameString
+ * @author Julien Ait azzouzene
+ */
 public class JapaneseString extends InGameString{
     @Override
     public boolean isCharacterValid(byte character) {

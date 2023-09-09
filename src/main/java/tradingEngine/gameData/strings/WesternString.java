@@ -1,5 +1,10 @@
 package main.java.tradingEngine.gameData.strings;
 
+/**
+ * A character string in a special encoding used in Western Gen 1/2 Pokémon games.
+ * @see InGameString
+ * @author Julien Ait azzouzene
+ */
 public class WesternString extends InGameString{
 
     @Override
@@ -55,6 +60,11 @@ public class WesternString extends InGameString{
         //TODO build InGameString from regular String
     }
 
+    /**
+     * Convert a hexadecimal encoded in-game string to a translated String
+     * @param hexString -> the encoded in-game string as a hexadecimal String
+     * @return the converted String
+     */
     public static String hexToString(String hexString){
         int stringLength = hexString.length();
         if(stringLength % 2 != 0){

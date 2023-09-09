@@ -1,5 +1,12 @@
 package main.java.tradingEngine.gameData.strings;
 
+/**
+ * An enumeration whose purpose is to convert the characters used in Japanese Pokémon games into characters that can be
+ * used in Java strings.
+ * value -> the numeric value corresponding to the character in the in-game encoding.
+ * character -> the character in its "regular" version.
+ * @author Julien Ait azzouzene
+ */
 public enum InGameJapaneseCharacter {
     DELIMITER((byte) 0x50, '\0'),
     HIRAGANA_A((byte) 0xB1, 'あ'),
@@ -165,6 +172,11 @@ public enum InGameJapaneseCharacter {
         this.character = character;
     }
 
+    /**
+     * Returns one of the enumeration's elements corresponding to a numeric value.
+     * @param value -> the value of the wanted character in the in-game encoding
+     * @return the corresponding enumeration element, null if none is found
+     */
     public static InGameJapaneseCharacter characterFromValue(byte value){
         for(InGameJapaneseCharacter character : values()){
             if(character.value == value){

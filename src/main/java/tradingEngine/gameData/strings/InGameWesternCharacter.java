@@ -1,5 +1,12 @@
 package main.java.tradingEngine.gameData.strings;
 
+/**
+ * An enumeration whose purpose is to convert the characters used in Western Pokémon games into characters that can be
+ * used in Java strings.
+ * value -> the numeric value corresponding to the character in the in-game encoding
+ * character -> the character in its "regular" version.
+ * @author Julien Ait azzouzene
+ */
 public enum InGameWesternCharacter {
     DELIMITER((byte) 0x50, '\0'),
     SPACE((byte) 0x7F, ' '),
@@ -83,6 +90,11 @@ public enum InGameWesternCharacter {
         this.character = character;
     }
 
+    /**
+     * Returns one of the enumeration's elements corresponding to a numeric value.
+     * @param value -> the value of the wanted character in the in-game encoding
+     * @return the corresponding enumeration element, null if none is found
+     */
     public static InGameWesternCharacter characterFromValue(byte value){
         for(InGameWesternCharacter character : values()){
             if(character.value == value){

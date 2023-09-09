@@ -43,19 +43,19 @@ public class Pokemon {
 
         if(japanese){
             if(trainerNameLength > 6){
-                throw new SizeLimitExceededException("trainerName is too long");
+                throw new IllegalArgumentException("trainerName is too long");
             }
             if(nicknameLength > 6){
-                throw new SizeLimitExceededException("nickname is too long");
+                throw new IllegalArgumentException("nickname is too long");
             }
         }
 
         else{
             if(trainerNameLength > 8){
-                throw new SizeLimitExceededException("trainerName is too long");
+                throw new IllegalArgumentException("trainerName is too long");
             }
             if(nicknameLength > 11){
-                throw new SizeLimitExceededException("nickname is too long");
+                throw new IllegalArgumentException("nickname is too long");
             }
         }
 
