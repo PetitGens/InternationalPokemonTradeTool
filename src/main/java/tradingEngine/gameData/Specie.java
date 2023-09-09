@@ -1,7 +1,14 @@
 package main.java.tradingEngine.gameData;
 
+/**
+ * An enumeration used to store information about every Pokémon, like their index number of name in each language.
+ * "Missingno" is meant for glitch Pokémon (i.e. those who don't have a legal index number). "BLANK_SPACE" is used as a
+ * placeholder for spaces in the porty or in a box.
+ * @author Julien Ait azzouzene
+ */
 public enum Specie {
     MISSINGNO(-1),
+    BLANK_SPACE(-2),
     RHYDON(1),
     KANGASKHAN(2),
     NIDORAN_M(3),
@@ -156,10 +163,15 @@ public enum Specie {
 
     private final int index;
 
-    private Specie(int index){
+    Specie(int index){
         this.index = index;
     }
 
+    /**
+     * Returns the Specie corresponding to the given index number.
+     * @param index -> the index number of the wanted Specie
+     * @return the corresponding Specie, or MISSINGNO if none was found
+     */
     public static Specie specieFromIndex(int index){
         for(int i = 0; i < Specie.values().length; i++){
             Specie current_specie = Specie.values()[i];
