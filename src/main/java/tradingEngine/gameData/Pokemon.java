@@ -18,7 +18,7 @@ public class Pokemon {
     private int[] evs = new int[5];
 
     private int iv_field;
-    private int[] ivs = new int[4];
+    private int[] ivs = new int[5];
     private int[] movesPps = new int[4];
     private int[] stats = new int[5];
     private InGameString trainerName;
@@ -143,7 +143,15 @@ public class Pokemon {
 
         // IVs
         iv_field = Bytes.twoBytesToInt(data[0x1B], data[0x1C]);
-        //TODO place each iv at the right place
+
+        int iv_copy = iv_field;
+        ivs[0] = 0;
+
+        for(int i = 0; i < 4; i++){
+            ivs[4 - i] = iv_copy & 0xF;
+            ivs[0] += (ivs[4 - i] % 2) << i;
+            iv_copy = iv_copy >> 4;
+        }
     }
 
     public Specie getSpecie() {
