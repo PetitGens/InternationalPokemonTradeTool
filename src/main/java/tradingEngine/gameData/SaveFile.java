@@ -2,7 +2,6 @@ package main.java.tradingEngine.gameData;
 
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +23,9 @@ public class SaveFile {
 
         //TODO verify file size
 
-        //TODO verify the checksum
+        if(! verifyChecksum(saveData)){
+            throw new IOException("invalid checksum");
+        }
         //TODO detect language
 
         // Reading party data
@@ -144,8 +145,16 @@ public class SaveFile {
         throw new RuntimeException("not implemented");
     }
 
-    private boolean verifyChecksum(File file){
-        throw new RuntimeException("not implemented");
+    private boolean verifyChecksum(byte[] data){
+        int checksum = 0;
+
+        for(int i = 0x2598; i <= 0x3522; i++){
+            checksum += Bytes.byteToUnsignedByte(data[i]);
+        }
+
+        checksum = (checksum & 0xFF) ^ 0xFF;
+
+        return checksum == Bytes.byteToUnsignedByte(data[0x3523]);
     }
 
     private void readCurrentBoxPokemon(byte[] saveData){
