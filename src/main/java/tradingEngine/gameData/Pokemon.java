@@ -9,6 +9,8 @@ import main.java.tradingEngine.gameData.strings.WesternString;
  * @author Julien Ait azzouzene
  */
 public class Pokemon {
+    public static final Pokemon BLANK_SPACE = new Pokemon();
+
     private Specie specie;
     private int indexNumber;
     private int currentHp;
@@ -329,5 +331,9 @@ public class Pokemon {
      */
     public InGameString getNickname() {
         return nickname;
+    }
+
+    private Pokemon(){
+        specie = Specie.BLANK_SPACE;
     }
 }
