@@ -1,5 +1,6 @@
 package main.java.tradingEngine.gameData;
 
+import main.java.tradingEngine.gameData.strings.InGameString;
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
 
 import java.io.IOException;
@@ -23,11 +24,15 @@ public class SaveFile {
 
     private final int currentBox;
 
+    private final int nameLength;
+
     public SaveFile(String path) throws IOException {
         this.path = path;
         byte[] saveData = Files.readAllBytes(Path.of(path));
 
-        //TODO verify file size
+        if(saveData.length != 0x8000 && saveData.length != 0x802C){
+            throw new IOException("invalid save file");
+        }
 
         if(isWestern(saveData)){
             japanese = false;
@@ -53,6 +58,7 @@ public class SaveFile {
             currentBoxOffset = 0x302D;
             boxSize = 30;
             boxCount = 8;
+            nameLength = 6;
         }
         else{
             partyOffset = 0x2F2C;
@@ -60,6 +66,7 @@ public class SaveFile {
             currentBoxOffset = 0x30C0;
             boxSize = 20;
             boxCount = 12;
+            nameLength = 11;
         }
 
         boxes = new Pokemon[boxCount][boxSize];
@@ -150,10 +157,22 @@ public class SaveFile {
             byte[] pokemonData = new byte[44];
             System.arraycopy(saveData, pokemonOffset, pokemonData, 0, 44);
 
-            //TODO read nickname and ot name
-            byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+            // Reading trainer name and nickname
 
-            party[i] = new Pokemon(pokemonData, nickname, nickname, false);
+            int trainerNameOffset = partyOffset + 0x110 + nameLength * i;
+            byte[] trainerName = new byte[nameLength];
+            System.arraycopy(saveData, trainerNameOffset, trainerName, 0, nameLength);
+
+            int nicknameOffset = partyOffset + 0X110 + nameLength * (6 + i);
+            byte[] nickname = new byte[nameLength];
+            System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
+
+            try{
+                party[i] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+            }
+            catch(IllegalArgumentException e){
+                throw new IOException("illegal name : " + e.getMessage());
+            }
 
             if(party[i].getSpecie() != partySpeciesList[i]){
                 throw new IOException("a party's pokemon's specie doesn't match the species list");
@@ -165,7 +184,7 @@ public class SaveFile {
         }
     }
 
-    private void readCurrentBoxPokemon(byte[] saveData, int boxOffset){
+    private void readCurrentBoxPokemon(byte[] saveData, int boxOffset) throws IOException {
         int pokemonCount = Bytes.byteToUnsignedByte(saveData[boxOffset]);
         
         int firstPokemonOffset;
@@ -177,18 +196,29 @@ public class SaveFile {
         	firstPokemonOffset = boxOffset + 0x16;
         }
         
-        for(int pokemonIndex = 0; pokemonIndex < pokemonCount; pokemonIndex++){
+        for(int pokemonIndex = 0; pokemonIndex < pokemonCount; pokemonIndex++) {
             int pokemonOffset = firstPokemonOffset + pokemonIndex * 33;
             byte[] pokemonData = new byte[33];
             System.arraycopy(saveData, pokemonOffset, pokemonData, 0, 33);
 
-            //TODO read nickname and ot name
-            byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+            // Reading trainer name and nickname
 
-            boxes[currentBox][pokemonIndex] = new Pokemon(pokemonData, nickname, nickname, false);
+            int trainerNameOffset = firstPokemonOffset + 33 * boxSize + nameLength * pokemonIndex;
+            byte[] trainerName = new byte[nameLength];
+            System.arraycopy(saveData, trainerNameOffset, trainerName, 0, nameLength);
+
+            int nicknameOffset = firstPokemonOffset + 33 * boxSize + nameLength * (boxSize + pokemonIndex);
+            byte[] nickname = new byte[nameLength];
+            System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
+
+            try {
+                boxes[currentBox][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+            } catch (IllegalArgumentException e) {
+                throw new IOException("illegal name : " + e.getMessage());
+            }
         }
 
-        for(int i = pokemonCount; i < 20; i++){
+        for(int i = pokemonCount; i < boxSize; i++){
             boxes[currentBox][i] = Pokemon.BLANK_SPACE;
         }
     }
@@ -222,10 +252,21 @@ public class SaveFile {
                 byte[] pokemonData = new byte[33];
                 System.arraycopy(saveData, pokemonOffset, pokemonData, 0, 33);
 
-                //TODO read nickname and ot name
-                byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+                // Reading trainer name and nickname
 
-                boxes[boxIndex][pokemonIndex] = new Pokemon(pokemonData, nickname, nickname, false);
+                int trainerNameOffset = boxOffset + 2 + 34 * boxSize + nameLength * pokemonIndex;
+                byte[] trainerName = new byte[nameLength];
+                System.arraycopy(saveData, trainerNameOffset, trainerName, 0, nameLength);
+
+                int nicknameOffset = boxOffset + 2 + 34 * boxSize + nameLength * (boxSize + pokemonIndex);
+                byte[] nickname = new byte[nameLength];
+                System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
+
+                try {
+                    boxes[boxIndex][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                } catch (IllegalArgumentException e) {
+                    throw new IOException("illegal name : " + e.getMessage());
+                }
             }
 
             for(int i = pokemonCount; i < boxSize; i++){
@@ -248,10 +289,21 @@ public class SaveFile {
                 byte[] pokemonData = new byte[33];
                 System.arraycopy(saveData, pokemonOffset, pokemonData, 0, 33);
 
-                //TODO read nickname and ot name
-                byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+                // Reading trainer name and nickname
 
-                boxes[boxIndex + boxCount / 2][pokemonIndex] = new Pokemon(pokemonData, nickname, nickname, false);
+                int trainerNameOffset = boxOffset + 2 + 34 * boxSize + nameLength * pokemonIndex;
+                byte[] trainerName = new byte[nameLength];
+                System.arraycopy(saveData, trainerNameOffset, trainerName, 0, nameLength);
+
+                int nicknameOffset = boxOffset + 2 + 34 * boxSize + nameLength * (boxSize + pokemonIndex);
+                byte[] nickname = new byte[nameLength];
+                System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
+
+                try {
+                    boxes[boxIndex + boxCount / 2][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                } catch (IllegalArgumentException e) {
+                    throw new IOException("illegal name : " + e.getMessage());
+                }
             }
 
             for(int i = pokemonCount; i < boxSize; i++){

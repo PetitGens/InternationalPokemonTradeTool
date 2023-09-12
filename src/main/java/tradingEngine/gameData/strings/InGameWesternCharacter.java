@@ -80,6 +80,7 @@ public enum InGameWesternCharacter {
     SLASH((byte) 0xF3, '/'),
     COMMA((byte) 0xF4, ','),
     FEMALE((byte) 0xF5, '♀'),
+    TRAINER((byte) 0x5D, '*')
     ;
 
     public final byte value;

@@ -161,6 +161,7 @@ public enum InGameJapaneseCharacter {
     KATAKANA_SMALL_YA((byte) 0xAD, 'ャ'),
     KATAKANA_SMALL_YU((byte) 0xAE, 'ュ'),
     KATAKANA_SMALL_YO((byte) 0xAF, 'ョ'),
+    KATAKANA_SMALL_I((byte) 0xB0, 'ィ'),
     CHOONPU((byte) 0xE3, 'ー'),
 
     ;

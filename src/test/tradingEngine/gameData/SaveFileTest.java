@@ -95,7 +95,7 @@ class SaveFileTest {
         fr.getBoxPokemon(0, 0);
         fr.getBoxPokemon(11, 0);
         fr.getBoxPokemon(0, 19);
-
+        
         jap.getPartyPokemon(0);
         jap.getPartyPokemon(5);
         jap.getBoxPokemon(0, 0);
@@ -140,6 +140,9 @@ class SaveFileTest {
         assertEquals(63, pokemon.getStats()[2]);
         assertEquals(61, pokemon.getStats()[3]);
         assertEquals(72, pokemon.getStats()[4]);
+
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+        assertEquals("FLORIZARRE", pokemon.getNickname().toString());
     }
 
     private void checkBoxPokemon(Pokemon pokemon){
@@ -173,6 +176,9 @@ class SaveFileTest {
         assertEquals(10, pokemon.getMovesPps()[1]);
         assertEquals(20, pokemon.getMovesPps()[2]);
         assertEquals(15, pokemon.getMovesPps()[3]);
+
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+        assertEquals("SNORLAX", pokemon.getNickname().toString());
     }
 
     private void checkBoxPokemon2(Pokemon pokemon){
@@ -206,6 +212,9 @@ class SaveFileTest {
         assertEquals(5, pokemon.getMovesPps()[1]);
         assertEquals(20, pokemon.getMovesPps()[2]);
         assertEquals(30, pokemon.getMovesPps()[3]);
+
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+        assertEquals("DRACOLOSSE", pokemon.getNickname().toString());
     }
 
     private void checkCurrentBoxPokemon(Pokemon pokemon){
@@ -239,6 +248,9 @@ class SaveFileTest {
         assertEquals(40, pokemon.getMovesPps()[1]);
         assertEquals(10, pokemon.getMovesPps()[2]);
         assertEquals(15, pokemon.getMovesPps()[3]);
+
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+        assertEquals("TRIOPIKEUR", pokemon.getNickname().toString());
     }
     
     private void checkJapanesePartyPokemon(Pokemon pokemon) {
@@ -278,6 +290,9 @@ class SaveFileTest {
         assertEquals(53, pokemon.getStats()[2]);
         assertEquals(70, pokemon.getStats()[3]);
         assertEquals(59, pokemon.getStats()[4]);
+
+        assertEquals("ハケッ", pokemon.getTrainerName().toString());
+        assertEquals("カキ", pokemon.getNickname().toString());
     }
 
     private void checkJapaneseCurrentBoxPokemon(Pokemon pokemon){
@@ -311,6 +326,9 @@ class SaveFileTest {
         assertEquals(10, pokemon.getMovesPps()[1]);
         assertEquals(5, pokemon.getMovesPps()[2]);
         assertEquals(30, pokemon.getMovesPps()[3]);
+
+        assertEquals("ハケッ", pokemon.getTrainerName().toString());
+        assertEquals("ミュウ", pokemon.getNickname().toString());
     }
     
     private void checkJapaneseBoxPokemon(Pokemon pokemon) {
@@ -344,5 +362,8 @@ class SaveFileTest {
         assertEquals(0, pokemon.getMovesPps()[1]);
         assertEquals(0, pokemon.getMovesPps()[2]);
         assertEquals(0, pokemon.getMovesPps()[3]);
+
+        assertEquals("ハケッ", pokemon.getTrainerName().toString());
+        assertEquals("パラス", pokemon.getNickname().toString());
     }
 }

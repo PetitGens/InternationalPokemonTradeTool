@@ -78,19 +78,19 @@ public class Pokemon {
         int nicknameLength = InGameString.stringLength(nickname);
 
         if(japanese){
-            if(trainerNameLength > 6){
+            if(trainerNameLength > 5){
                 throw new IllegalArgumentException("trainerName is too long");
             }
-            if(nicknameLength > 6){
+            if(nicknameLength > 5){
                 throw new IllegalArgumentException("nickname is too long");
             }
         }
 
         else{
-            if(trainerNameLength > 8){
+            if(trainerNameLength > 7){
                 throw new IllegalArgumentException("trainerName is too long");
             }
-            if(nicknameLength > 11){
+            if(nicknameLength > 10){
                 throw new IllegalArgumentException("nickname is too long");
             }
         }
