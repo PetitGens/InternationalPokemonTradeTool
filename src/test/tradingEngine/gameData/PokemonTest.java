@@ -3,7 +3,6 @@ package test.tradingEngine.gameData;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.Specie;
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
-import main.java.tradingEngine.gameData.strings.WesternString;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,7 +125,7 @@ class PokemonTest {
         assertArrayEquals(expectedData, venasaur.toBoxRawData());
     }
 
-    public byte[] partyPokemonData(){
+    public static byte[] partyPokemonData(){
         return new byte[]{
                 (byte) 0x9A,
                 (byte) 0x00,
@@ -175,7 +174,7 @@ class PokemonTest {
         };
     }
 
-    public byte[] boxPokemonData(){
+    public static byte[] boxPokemonData(){
         return new byte[]{
                 (byte) 0x84,
                 (byte) 0x00,

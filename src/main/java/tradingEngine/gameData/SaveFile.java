@@ -113,24 +113,54 @@ public class SaveFile {
         return boxes[boxNumber][pokemonIndex];
     }
 
-    public void storePokemonInParty(int index, Pokemon pokemon){
-        throw new RuntimeException("not implemented");
+    public void storePokemonInParty(int index, Pokemon pokemon) throws IOException {
+        if(getPartyPokemon(index).getSpecie().equals(Specie.BLANK_SPACE)){
+            throw new IllegalArgumentException("there is no Pokémon at that index");
+        }
+
+        if(pokemon.isJapanese() != japanese){
+            throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
+        }
+
+        Path file = Path.of(path);
+
+        byte[] saveData = Files.readAllBytes(file);
+        writePartyPokemon(saveData, index, pokemon);
+
+        fixChecksum(saveData);
+
+        Files.write(file, saveData);
+        party[index] = pokemon;
     }
 
-    public void storePokemonInBox(int boxNumber, int pokemonIndex, Pokemon pokemon){
-        throw new RuntimeException("not implemented");
-    }
+    public void storePokemonInBox(int boxNumber, int pokemonIndex, Pokemon pokemon) throws IOException {
+        if(getBoxPokemon(boxNumber, pokemonIndex).getSpecie().equals(Specie.BLANK_SPACE)){
+            throw new IllegalArgumentException("there is no Pokémon at that index");
+        }
 
-    private boolean verifyChecksum(byte[] data){
-        int checksumOffset;
-        int checksum = 0;
+        if(pokemon.isJapanese() != japanese){
+            throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
+        }
 
-        if(japanese){
-            checksumOffset = 0x3594;
+        Path file = Path.of(path);
+        byte[] saveData = Files.readAllBytes(file);
+
+        if(boxNumber == currentBox){
+            writeCurrentBoxPokemon(saveData, pokemonIndex, pokemon);
         }
         else{
-            checksumOffset = 0x3523;
+            writeBoxPokemon(saveData, boxNumber, pokemonIndex, pokemon);
         }
+
+        fixChecksum(saveData);
+
+        Files.write(file, saveData);
+        boxes[boxNumber][pokemonIndex] = pokemon;
+    }
+
+    private int calculateChecksum(byte[] data){
+        int checksumOffset = japanese ? 0x3594 : 0x3523;
+        int checksum = 0;
 
         for(int i = 0x2598; i <= checksumOffset - 1; i++){
             checksum += Bytes.byteToUnsignedByte(data[i]);
@@ -138,7 +168,19 @@ public class SaveFile {
 
         checksum = (checksum & 0xFF) ^ 0xFF;
 
-        return checksum == Bytes.byteToUnsignedByte(data[checksumOffset]);
+        return checksum;
+    }
+
+    private boolean verifyChecksum(byte[] data){
+        int checksumOffset = japanese ? 0x3594 : 0x3523;
+        return calculateChecksum(data) == Bytes.byteToUnsignedByte(data[checksumOffset]);
+    }
+
+    private void fixChecksum(byte[] data){
+        int checksum = calculateChecksum(data);
+        int checksumOffset = japanese ? 0x3594 : 0x3523;
+
+        data[checksumOffset] = (byte) checksum;
     }
 
     private void readPartyPokemon(byte[] saveData, int partyOffset) throws IOException {
@@ -176,23 +218,34 @@ public class SaveFile {
             }
         }
 
-        for(int i = partyLength; i < 5; i++){
+        for(int i = partyLength; i < 6; i++){
             party[i] = Pokemon.BLANK_SPACE;
         }
+    }
+
+    private void writePartyPokemon(byte[] saveData, int index, Pokemon pokemon){
+        int partyOffset = japanese ? 0x2ED5 : 0x2F2C;
+
+        saveData[partyOffset + index + 1] = (byte) pokemon.getIndexNumber();
+
+        int pokemonOffset = partyOffset + 8 + index * 44;
+        byte[] pokemonData = pokemon.toPartyRawData();
+        System.arraycopy(pokemonData, 0, saveData, pokemonOffset, 44);
+
+        int trainerNameOffset = partyOffset + 0x110 + nameLength * index;
+        byte[] trainerName = pokemon.getTrainerName().toArray();
+        System.arraycopy(trainerName, 0, saveData, trainerNameOffset, nameLength);
+
+        int nicknameOffset = partyOffset + 0x110 + nameLength * (6 + index);
+        byte[] nickname = pokemon.getNickname().toArray();
+        System.arraycopy(nickname, 0, saveData, nicknameOffset, nameLength);
     }
 
     private void readCurrentBoxPokemon(byte[] saveData, int boxOffset) throws IOException {
         int pokemonCount = Bytes.byteToUnsignedByte(saveData[boxOffset]);
         
-        int firstPokemonOffset;
-        
-        if(japanese) {
-        	firstPokemonOffset = boxOffset + 0x20;
-        }
-        else {
-        	firstPokemonOffset = boxOffset + 0x16;
-        }
-        
+        int firstPokemonOffset = japanese ? boxOffset + 0x20 : boxOffset + 0x16;
+
         for(int pokemonIndex = 0; pokemonIndex < pokemonCount; pokemonIndex++) {
             int pokemonOffset = firstPokemonOffset + pokemonIndex * 33;
             byte[] pokemonData = new byte[33];
@@ -218,6 +271,25 @@ public class SaveFile {
         for(int i = pokemonCount; i < boxSize; i++){
             boxes[currentBox][i] = Pokemon.BLANK_SPACE;
         }
+    }
+
+    private void writeCurrentBoxPokemon(byte[] saveData, int index, Pokemon pokemon){
+        int currentBoxOffset = japanese ? 0x302D : 0x30C0;
+        saveData[currentBoxOffset + index + 1] = (byte) pokemon.getIndexNumber();
+
+        int firstPokemonOffset = japanese ? currentBoxOffset + 0x20 : currentBoxOffset + 0x16;
+
+        int pokemonOffset = firstPokemonOffset + index * 33;
+        byte[] pokemonData = pokemon.toBoxRawData();
+        System.arraycopy(pokemonData, 0, saveData, pokemonOffset, 33);
+
+        int trainerNameOffset = firstPokemonOffset + 33 * boxSize + nameLength * index;
+        byte[] trainerName = pokemon.getTrainerName().toArray();
+        System.arraycopy(trainerName, 0, saveData, trainerNameOffset, nameLength);
+
+        int nicknameOffset = firstPokemonOffset + 33 * boxSize + nameLength * (boxSize + index);
+        byte[] nickname = pokemon.getNickname().toArray();
+        System.arraycopy(nickname, 0, saveData, nicknameOffset, nameLength);
     }
 
     private void readBoxesPokemon(byte[] saveData) throws IOException {
@@ -282,7 +354,7 @@ public class SaveFile {
             int pokemonCount = Bytes.byteToUnsignedByte(saveData[boxOffset]);
 
             for(int pokemonIndex = 0; pokemonIndex < pokemonCount; pokemonIndex++){
-                int pokemonOffset = boxOffset + 0x16 + pokemonIndex * 33;
+                int pokemonOffset = boxOffset + 2 + boxSize + pokemonIndex * 33;
                 byte[] pokemonData = new byte[33];
                 System.arraycopy(saveData, pokemonOffset, pokemonData, 0, 33);
 
@@ -307,6 +379,31 @@ public class SaveFile {
                 boxes[boxIndex + boxCount / 2][i] = Pokemon.BLANK_SPACE;
             }
         }
+    }
+
+    private void writeBoxPokemon(byte[] saveData, int boxNumber, int pokemonIndex, Pokemon pokemon){
+        int bankOffset = 0x4000;
+
+        if(boxNumber >= boxCount / 2){
+            bankOffset = 0x6000;
+            boxNumber -= boxCount / 2;
+        }
+
+        int boxDiff = japanese ? 0x566 : 0x462;
+        int boxOffset = bankOffset + boxNumber * boxDiff;
+        saveData[boxOffset + 1 + pokemonIndex] = (byte) pokemon.getIndexNumber();
+
+        int pokemonOffset = boxOffset + boxSize + 2 + pokemonIndex * 33;
+        byte[] pokemonData = pokemon.toBoxRawData();
+        System.arraycopy(pokemonData, 0, saveData, pokemonOffset, 33);
+
+        int trainerNameOffset = boxOffset + 2 + 34 * boxSize + nameLength * pokemonIndex;
+        byte[] trainerName = pokemon.getTrainerName().toArray();
+        System.arraycopy(trainerName, 0, saveData, trainerNameOffset, nameLength);
+
+        int nicknameOffset = boxOffset + 2 + 34 * boxSize + nameLength * (boxSize + pokemonIndex);
+        byte[] nickname = pokemon.getNickname().toArray();
+        System.arraycopy(nickname, 0, saveData, nicknameOffset, nameLength);
     }
 
     public static boolean isWestern(byte[] saveData){

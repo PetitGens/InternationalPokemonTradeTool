@@ -2,6 +2,8 @@ package main.java.tradingEngine.gameData.strings;
 
 import main.java.tradingEngine.gameData.Bytes;
 
+import java.util.Arrays;
+
 /**
  * A character string in a special encoding depending on the language of the game.
  * It has a size limit of 10 useful characters since no in-game strings used in this program should be longer than that.
@@ -152,5 +154,18 @@ public abstract class InGameString {
         }
         newArray[i] = 0x50;
         return newArray;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InGameString that = (InGameString) o;
+        return Arrays.equals(array, that.array);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(array);
     }
 }

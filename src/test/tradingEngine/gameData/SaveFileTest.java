@@ -104,8 +104,81 @@ class SaveFileTest {
     }
 
     @Test
-    void pokemonWritingTest(){
+    void westernPartyPokemonWritingTest() throws IOException{
+    	Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+                StandardCopyOption.REPLACE_EXISTING);
 
+        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+        
+        Pokemon newPartyPokemon = new Pokemon(PokemonTest.boxPokemonData(), new byte[]{(byte)0x80},
+                new byte[]{
+                        (byte) 0x83,
+                        (byte) 0x8E,
+                        (byte) 0x83,
+                        (byte) 0x8E,
+                }, false);
+
+        saveFile.storePokemonInParty(4, newPartyPokemon);
+
+        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+
+        Pokemon storedPokemon = saveFile2.getPartyPokemon(4);
+
+        checkStoredWesternPartyPokemon(storedPokemon);
+        
+        assertEquals(newPartyPokemon, storedPokemon);
+    }
+
+    @Test
+    void westernBoxPokemonWritingTest() throws IOException{
+        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+                StandardCopyOption.REPLACE_EXISTING);
+
+        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+
+        Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
+                new byte[]{
+                        (byte) 0x8B,
+                        (byte) 0x84,
+                        (byte) 0x80,
+                        (byte) 0x85,
+                }, false);
+
+        saveFile.storePokemonInBox(0, 3, newBoxPokemon);
+
+        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+
+        Pokemon storedPokemon = saveFile2.getBoxPokemon(0, 3);
+
+        //checkPartyPokemon(storedPokemon);
+        
+        assertEquals(newBoxPokemon, storedPokemon);
+    }
+    
+    @Test
+    void westernCurrentBoxPokemonWritingTest() throws IOException{
+        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+                StandardCopyOption.REPLACE_EXISTING);
+
+        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+
+        Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
+                new byte[]{
+                        (byte) 0x8B,
+                        (byte) 0x84,
+                        (byte) 0x80,
+                        (byte) 0x85,
+                }, false);
+
+        saveFile.storePokemonInBox(1, 19, newBoxPokemon);
+
+        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+
+        Pokemon storedPokemon = saveFile2.getBoxPokemon(1, 19);
+
+        //checkPartyPokemon(storedPokemon);
+        
+        assertEquals(newBoxPokemon, storedPokemon);
     }
     
     private void checkPartyPokemon(Pokemon pokemon){
@@ -370,5 +443,38 @@ class SaveFileTest {
 
         assertEquals("ハケッ", pokemon.getTrainerName().toString());
         assertEquals("パラス", pokemon.getNickname().toString());
+    }
+
+    private void checkStoredWesternPartyPokemon(Pokemon pokemon){
+        assertEquals(0x84, pokemon.getIndexNumber());
+        assertEquals(Specie.SNORLAX, pokemon.getSpecie());
+        assertEquals(208, pokemon.getCurrentHp());
+        assertEquals(45, pokemon.getLevel());
+        assertEquals(0, pokemon.getStatusCondition());
+        assertEquals(0, pokemon.getTypes()[0]);
+        assertEquals(0, pokemon.getTypes()[1]);
+        assertEquals(200, pokemon.getCatchRate());
+        assertEquals(34, pokemon.getMoves()[0]);
+        assertEquals(156, pokemon.getMoves()[1]);
+        assertEquals(133, pokemon.getMoves()[2]);
+        assertEquals(38, pokemon.getMoves()[3]);
+        assertEquals(19076, pokemon.getTrainerId());
+        assertEquals(113906, pokemon.getExp());
+        assertEquals(200, pokemon.getEvs()[0]);
+        assertEquals(300, pokemon.getEvs()[1]);
+        assertEquals(400, pokemon.getEvs()[2]);
+        assertEquals(600, pokemon.getEvs()[3]);
+        assertEquals(500, pokemon.getEvs()[4]);
+
+        assertEquals(10, pokemon.getIvs()[0]);
+        assertEquals(1, pokemon.getIvs()[1]);
+        assertEquals(4, pokemon.getIvs()[2]);
+        assertEquals(15, pokemon.getIvs()[3]);
+        assertEquals(12, pokemon.getIvs()[4]);
+
+        assertEquals(15, pokemon.getMovesPps()[0]);
+        assertEquals(10, pokemon.getMovesPps()[1]);
+        assertEquals(20, pokemon.getMovesPps()[2]);
+        assertEquals(15, pokemon.getMovesPps()[3]);
     }
 }

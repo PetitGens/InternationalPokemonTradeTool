@@ -4,6 +4,9 @@ import main.java.tradingEngine.gameData.strings.JapaneseString;
 import main.java.tradingEngine.gameData.strings.InGameString;
 import main.java.tradingEngine.gameData.strings.WesternString;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * This class is meant to store a Pokémon's data.
  * @author Julien Ait azzouzene
@@ -29,6 +32,7 @@ public class Pokemon {
     private int[] stats = new int[5];
     private InGameString trainerName;
     private InGameString nickname;
+    private boolean japanese;
     private byte[] rawData;
 
     /**
@@ -41,6 +45,7 @@ public class Pokemon {
      * @see InGameString
      */
     public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, boolean japanese) {
+        this.japanese = japanese;
         int trainerNameLength = InGameString.stringLength(trainerName);
         int nicknameLength = InGameString.stringLength(nickname);
 
@@ -305,6 +310,7 @@ public class Pokemon {
     public InGameString getNickname() {
         return nickname;
     }
+    public boolean isJapanese(){return japanese;}
 
     public byte[] toPartyRawData(){
         if(rawData.length == 44){
@@ -365,5 +371,25 @@ public class Pokemon {
 
     private Pokemon(){
         specie = Specie.BLANK_SPACE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return indexNumber == pokemon.indexNumber && currentHp == pokemon.currentHp && level == pokemon.level && statusCondition == pokemon.statusCondition && catchRate == pokemon.catchRate && trainerId == pokemon.trainerId && exp == pokemon.exp && japanese == pokemon.japanese && Arrays.equals(types, pokemon.types) && Arrays.equals(moves, pokemon.moves) && Arrays.equals(evs, pokemon.evs) && Arrays.equals(ivs, pokemon.ivs) && Arrays.equals(movesPps, pokemon.movesPps) && Arrays.equals(stats, pokemon.stats) && trainerName.equals(pokemon.trainerName) && nickname.equals(pokemon.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(indexNumber, currentHp, level, statusCondition, catchRate, trainerId, exp, trainerName, nickname, japanese);
+        result = 31 * result + Arrays.hashCode(types);
+        result = 31 * result + Arrays.hashCode(moves);
+        result = 31 * result + Arrays.hashCode(evs);
+        result = 31 * result + Arrays.hashCode(ivs);
+        result = 31 * result + Arrays.hashCode(movesPps);
+        result = 31 * result + Arrays.hashCode(stats);
+        return result;
     }
 }
