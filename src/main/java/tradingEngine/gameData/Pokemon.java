@@ -29,40 +29,7 @@ public class Pokemon {
     private int[] stats = new int[5];
     private InGameString trainerName;
     private InGameString nickname;
-
-    /**
-     * This creates a Pokémon by specifying every field. I'm not sure if it'll end up being used in other means than
-     * testing.
-     * @param specie -> the Pokémon's specie internal index number
-     * @param currentHp -> the Pokémon's current HP number
-     * @param level -> the Pokémon's level
-     * @param statusCondition -> the Pokémon's current condition (0 if it has none)
-     * @param types -> the Pokémon's double type
-     * @param catchRate -> the Pokémon's catch rate (becomes held item when send in Gen2)
-     * @param moves -> the Pokémon's movement
-     * @param trainerId -> the Pokémon's original trainer's id number
-     * @param exp -> the Pokémon's current experience points number
-     * @param evs -> the Pokémon's current effort values
-     * @param ivs -> the Pokémon's current individual values (also called DVs in gen1/2)
-     * @param movesPps -> the Pokémon's pps value (each value contains the remaining pp of the move and the number of
-     * used pp ups)
-     * @param stats -> the Pokémon's stats
-     */
-    public Pokemon(int specie, int currentHp, int level, int statusCondition, int[] types, int catchRate, int[] moves, int trainerId, int exp, int[] evs, int[] ivs, int[] movesPps, int[] stats) {
-        this.specie = Specie.specieFromGen1Index(specie);
-        this.currentHp = currentHp;
-        this.level = level;
-        this.statusCondition = statusCondition;
-        this.types = types;
-        this.catchRate = catchRate;
-        this.moves = moves;
-        this.trainerId = trainerId;
-        this.exp = exp;
-        this.evs = evs;
-        this.ivs = ivs;
-        this.movesPps = movesPps;
-        this.stats = stats;
-    }
+    private byte[] rawData;
 
     /**
      * The main constructor that basically takes raw data and interpret them as a Pokémon. The main data section must
@@ -120,66 +87,68 @@ public class Pokemon {
             throw new IllegalArgumentException("illegal character in nickname");
         }
 
-        parsePokemonDate(data);
+        rawData = new byte[data.length];
+        System.arraycopy(data, 0, rawData, 0, rawData.length);
+
+        parsePokemonDate();
     }
 
     /**
      * A method used in the constructor to put all the Pokémon's data at the right variable
-     * @param data -> an array containing every single byte in a Pokémon's main data
      */
-    private void parsePokemonDate(byte[] data){
+    private void parsePokemonDate(){
         boolean inParty = false;
 
-        if(data.length == 44){
+        if(rawData.length == 44){
             inParty = true;
-        } else if (data.length != 33) {
+        } else if (rawData.length != 33) {
             throw new IllegalArgumentException("Pokémon data should either be 44 bytes long for a party Pokémon or 33" +
                     "bytes long for a box Pokémon");
         }
 
         // Pokémon Specie
-        indexNumber = Bytes.byteToUnsignedByte(data[0x0]);
+        indexNumber = Bytes.byteToUnsignedByte(rawData[0x0]);
         specie = Specie.specieFromGen1Index(indexNumber);
 
-        currentHp = Bytes.twoBytesToInt(data[0x1], data[0x2]);
+        currentHp = Bytes.twoBytesToInt(rawData[0x1], rawData[0x2]);
 
         // Level
         if(inParty){
-            level = Bytes.byteToUnsignedByte(data[0x21]);
+            level = Bytes.byteToUnsignedByte(rawData[0x21]);
         }
         else{
-            level = Bytes.byteToUnsignedByte(data[0x3]);
+            level = Bytes.byteToUnsignedByte(rawData[0x3]);
         }
 
-        statusCondition = Bytes.byteToUnsignedByte(data[0x4]);
+        statusCondition = Bytes.byteToUnsignedByte(rawData[0x4]);
 
         // Pokémon double type
-        types[0] = Bytes.byteToUnsignedByte(data[0x5]);
-        types[1] = Bytes.byteToUnsignedByte(data[0x6]);
+        types[0] = Bytes.byteToUnsignedByte(rawData[0x5]);
+        types[1] = Bytes.byteToUnsignedByte(rawData[0x6]);
 
-        catchRate = Bytes.byteToUnsignedByte(data[0x7]);
+        catchRate = Bytes.byteToUnsignedByte(rawData[0x7]);
 
         // Moves and PPs
         for(int i = 0; i < 4; i++){
-            moves[i] = Bytes.byteToUnsignedByte(data[0x8 + i]);
-            movesPps[i] = Bytes.byteToUnsignedByte(data[0x1D + i]);
+            moves[i] = Bytes.byteToUnsignedByte(rawData[0x8 + i]);
+            movesPps[i] = Bytes.byteToUnsignedByte(rawData[0x1D + i]);
         }
 
-        trainerId = Bytes.twoBytesToInt(data[0xc], data[0xd]);
+        trainerId = Bytes.twoBytesToInt(rawData[0xc], rawData[0xd]);
 
-        exp = Bytes.threeBytesToInt(data[0xe], data[0xf], data[0x10]);
+        exp = Bytes.threeBytesToInt(rawData[0xe], rawData[0xf], rawData[0x10]);
 
         // Effort Points (and stats if the Pokémon is in party)
         for (int i = 0; i < 5; i++){
-            evs[i] = Bytes.twoBytesToInt(data[0x11 + i * 2], data[0x12 + i * 2]);
+            evs[i] = Bytes.twoBytesToInt(rawData[0x11 + i * 2], rawData[0x12 + i * 2]);
 
             if(inParty){
-                stats[i] = Bytes.twoBytesToInt(data[0x22 + i * 2], data[0x23 + i * 2]);
+                stats[i] = Bytes.twoBytesToInt(rawData[0x22 + i * 2], rawData[0x23 + i * 2]);
             }
         }
 
         // IVs
-        iv_field = Bytes.twoBytesToInt(data[0x1B], data[0x1C]);
+        iv_field = Bytes.twoBytesToInt(rawData[0x1B], rawData[0x1C]);
 
         int iv_copy = iv_field;
         ivs[0] = 0;
@@ -190,6 +159,10 @@ public class Pokemon {
             iv_copy = iv_copy >> 4;
         }
 
+        // Calculate stats if in a box
+        if(! inParty){
+            calculateStats();
+        }
     }
 
     /**
@@ -331,6 +304,63 @@ public class Pokemon {
      */
     public InGameString getNickname() {
         return nickname;
+    }
+
+    public byte[] toPartyRawData(){
+        if(rawData.length == 44){
+            return rawData.clone();
+        }
+
+        byte[] returnArray = new byte[44];
+        System.arraycopy(rawData, 0, returnArray, 0, 33);
+
+        // The level of a box Pokémon is stored at 0x03 whereas in the party it's stored at 0x21.
+        // So we must copy the level at the right location
+        returnArray[0x21] = rawData[0x03];
+
+        // The Pokémon's stats are not stored in the box, so we have to put them back
+
+        for(int i = 0; i < 5;i++){
+            returnArray[0x22 + 2 * i] = Bytes.getHighByteFrom2BytesValue(stats[i]);
+            returnArray[0x23 + 2 * i] = Bytes.getLowByteFrom2BytesValue(stats[i]);
+        }
+
+        return returnArray;
+    }
+
+    public byte[] toBoxRawData(){
+        if(rawData.length == 33){
+            return rawData.clone();
+        }
+
+        byte[] returnArray = new byte[33];
+        System.arraycopy(rawData, 0, returnArray, 0, 33);
+
+        // The level of a box Pokémon is stored at 0x03 whereas in the party it's stored at 0x21.
+        // So we must copy the level at the right location
+        returnArray[0x03] = rawData[0x21];
+
+        return returnArray;
+    }
+
+    private void calculateStats(){
+        // Get base stats
+        int baseStats[] = new int[5];
+        baseStats[0] = specie.getBaseHP();
+        baseStats[1] = specie.getBaseAttack();
+        baseStats[2] = specie.getBaseDefense();
+        baseStats[3] = specie.getBaseSpeed();
+        baseStats[4] = specie.getBaseSpecial();
+        
+        // HP
+        // floor((((BaseStat + IV) × 2 + floor(ceil(sqrt(EV)) ÷ 4)) × Lvl) ÷ 100) + Lvl + 10.
+        stats[0] = ((baseStats[0] + ivs[0]) * 2 + (int) Math.ceil(Math.sqrt(evs[0])) / 4) * level / 100 + level + 10;
+        
+        // Attack, Defense, Speed and Special
+        // floor((((BaseStat + IV) × 2 + floor(ceil(sqrt(EV)) ÷ 4)) × Lvl) ÷ 100) + 5
+        for (int i = 1; i < 5; i++){
+            stats[i] = ((baseStats[i] + ivs[i]) * 2 + (int) Math.ceil(Math.sqrt(evs[i])) / 4) * level / 100 + 5;
+        }
     }
 
     private Pokemon(){

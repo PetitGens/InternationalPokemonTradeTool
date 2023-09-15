@@ -4,7 +4,7 @@ package main.java.tradingEngine.gameData;
  * A small utility for byte variables.
  * @author Julien Ait azzouzene
  */
-public abstract class Bytes {
+public interface Bytes {
 
     /**
      * Convert a byte value (which is signed) to an unsigned 8 bits value stored in an int.
@@ -35,5 +35,13 @@ public abstract class Bytes {
      */
     public static int threeBytesToInt(byte high_byte, byte mid_byte, byte low_byte){
         return 0x10000 * byteToUnsignedByte(high_byte) + twoBytesToInt(mid_byte, low_byte);
+    }
+
+    public static byte getHighByteFrom2BytesValue(int value){
+        return (byte)((value >> 8) & 0xFF);
+    }
+
+    public static byte getLowByteFrom2BytesValue(int value){
+        return (byte)(value & 0xFF);
     }
 }

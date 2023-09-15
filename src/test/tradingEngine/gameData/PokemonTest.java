@@ -3,6 +3,7 @@ package test.tradingEngine.gameData;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.Specie;
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
+import main.java.tradingEngine.gameData.strings.WesternString;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,11 +78,11 @@ class PokemonTest {
         assertEquals(38, boxPokemon.getMoves()[3]);
         assertEquals(19076, boxPokemon.getTrainerId());
         assertEquals(113906, boxPokemon.getExp());
-        assertEquals(117, boxPokemon.getEvs()[0]);
-        assertEquals(134, boxPokemon.getEvs()[1]);
-        assertEquals(187, boxPokemon.getEvs()[2]);
-        assertEquals(69, boxPokemon.getEvs()[3]);
-        assertEquals(67, boxPokemon.getEvs()[4]);
+        assertEquals(200, boxPokemon.getEvs()[0]);
+        assertEquals(300, boxPokemon.getEvs()[1]);
+        assertEquals(400, boxPokemon.getEvs()[2]);
+        assertEquals(600, boxPokemon.getEvs()[3]);
+        assertEquals(500, boxPokemon.getEvs()[4]);
 
         assertEquals(10, boxPokemon.getIvs()[0]);
         assertEquals(1, boxPokemon.getIvs()[1]);
@@ -95,12 +96,42 @@ class PokemonTest {
         assertEquals(15, boxPokemon.getMovesPps()[3]);
     }
 
+    @Test
+    void toPartyDataTest(){
+        byte[] boxData = boxPokemonData();
+        Pokemon snorlax = new Pokemon(boxData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, false);
+        byte[] expectedData = new byte[44];
+        System.arraycopy(boxData, 0, expectedData, 0, 33);
+
+        expectedData[0x21] = 45;
+        expectedData[0x23] = (byte)209;
+        expectedData[0x25] = 106;
+        expectedData[0x27] = 69;
+        expectedData[0x29] = 48;
+        expectedData[0x2B] = 76;
+        
+        byte[] actualData = snorlax.toPartyRawData();
+
+        assertArrayEquals(expectedData, actualData);
+    }
+
+    @Test
+    void toBoxDataTest(){
+        byte[] partyData = partyPokemonData();
+        Pokemon venasaur = new Pokemon(partyData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_H.value}, false);
+        byte[] expectedData = new byte[33];
+        System.arraycopy(partyData, 0, expectedData, 0, 33);
+
+        expectedData[3] = 32;
+        assertArrayEquals(expectedData, venasaur.toBoxRawData());
+    }
+
     public byte[] partyPokemonData(){
         return new byte[]{
                 (byte) 0x9A,
                 (byte) 0x00,
                 (byte) 0x51,
-                (byte) 0x07,
+                (byte) 0x00,
                 (byte) 0x00,
                 (byte) 0x16,
                 (byte) 0x03,
@@ -164,15 +195,15 @@ class PokemonTest {
                 (byte) 0xBC,
                 (byte) 0xF2,
                 (byte) 0x00,
-                (byte) 0x75,
-                (byte) 0x00,
-                (byte) 0x86,
-                (byte) 0x00,
-                (byte) 0xBB,
-                (byte) 0x00,
-                (byte) 0x45,
-                (byte) 0x00,
-                (byte) 0x43,
+                (byte) 0xC8,
+                (byte) 0x01,
+                (byte) 0x2C,
+                (byte) 0x01,
+                (byte) 0x90,
+                (byte) 0x02,
+                (byte) 0x58,
+                (byte) 0x01,
+                (byte) 0xF4,
                 (byte) 0x14,
                 (byte) 0xFC,
                 (byte) 0x0F,

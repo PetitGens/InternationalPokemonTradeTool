@@ -102,6 +102,11 @@ class SaveFileTest {
         jap.getBoxPokemon(7, 0);
         jap.getBoxPokemon(0, 29);
     }
+
+    @Test
+    void pokemonWritingTest(){
+
+    }
     
     private void checkPartyPokemon(Pokemon pokemon){
         assertEquals(0x9A, pokemon.getIndexNumber());

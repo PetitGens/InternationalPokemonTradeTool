@@ -1,4 +1,5 @@
 package main.java.tradingEngine;
+import main.java.tradingEngine.gameData.Bytes;
 import main.java.tradingEngine.gameData.strings.WesternString;
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-    	fileIOTest();
+        System.out.println(Bytes.getHighByteFrom2BytesValue(150*256));
     }
 
     public static void inGameStringTesting(){
