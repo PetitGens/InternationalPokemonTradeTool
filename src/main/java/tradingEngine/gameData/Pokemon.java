@@ -49,7 +49,7 @@ public class Pokemon {
      * @param stats -> the Pokémon's stats
      */
     public Pokemon(int specie, int currentHp, int level, int statusCondition, int[] types, int catchRate, int[] moves, int trainerId, int exp, int[] evs, int[] ivs, int[] movesPps, int[] stats) {
-        this.specie = Specie.specieFromIndex(specie);
+        this.specie = Specie.specieFromGen1Index(specie);
         this.currentHp = currentHp;
         this.level = level;
         this.statusCondition = statusCondition;
@@ -139,7 +139,7 @@ public class Pokemon {
 
         // Pokémon Specie
         indexNumber = Bytes.byteToUnsignedByte(data[0x0]);
-        specie = Specie.specieFromIndex(indexNumber);
+        specie = Specie.specieFromGen1Index(indexNumber);
 
         currentHp = Bytes.twoBytesToInt(data[0x1], data[0x2]);
 

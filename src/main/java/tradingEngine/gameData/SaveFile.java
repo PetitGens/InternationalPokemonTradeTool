@@ -1,8 +1,5 @@
 package main.java.tradingEngine.gameData;
 
-import main.java.tradingEngine.gameData.strings.InGameString;
-import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -150,7 +147,7 @@ public class SaveFile {
         for(int i = 0; i < partyLength; i++){
             // Reading list of species indexes
             int indexNumber = Bytes.byteToUnsignedByte(saveData[partyOffset + 1 + i]);
-            partySpeciesList[i] = Specie.specieFromIndex(indexNumber);
+            partySpeciesList[i] = Specie.specieFromGen1Index(indexNumber);
 
             //Reading all party Pokémon
             int pokemonOffset = partyOffset + 8 + i * 44;
