@@ -35,6 +35,9 @@ class SaveFileTest {
 
         Pokemon dugtrio = saveFile.getBoxPokemon(1, 19);
         checkCurrentBoxPokemon(dugtrio);
+        
+        assertEquals(19076, saveFile.getTrainerId());
+        assertEquals("PtJean" ,saveFile.getTrainerName().toString());
     }
 
     @Test
@@ -51,6 +54,9 @@ class SaveFileTest {
         checkJapaneseCurrentBoxPokemon(saveFile.getBoxPokemon(1, 1));
 
         checkJapaneseBoxPokemon(saveFile.getBoxPokemon(0, 2));
+        
+        assertEquals(19983, saveFile.getTrainerId());
+        assertEquals("ハケッ" ,saveFile.getTrainerName().toString());
     }
 
     @Test

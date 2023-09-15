@@ -1,5 +1,9 @@
 package main.java.tradingEngine.gameData;
 
+import main.java.tradingEngine.gameData.strings.InGameString;
+import main.java.tradingEngine.gameData.strings.JapaneseString;
+import main.java.tradingEngine.gameData.strings.WesternString;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +26,9 @@ public class SaveFile {
     private final int currentBox;
 
     private final int nameLength;
+
+    private final int trainerId;
+    private final InGameString trainerName;
 
     public SaveFile(String path) throws IOException {
         this.path = path;
@@ -88,6 +95,17 @@ public class SaveFile {
         readCurrentBoxPokemon(saveData, currentBoxOffset);
 
         readBoxesPokemon(saveData);
+
+        // Reading trainer's name and ID number
+
+        int idOffset = japanese? 0x25FB : 0x2605;
+        trainerId = Bytes.twoBytesToInt(saveData[idOffset], saveData[idOffset + 1]);
+
+        int trainerNameOffset = 0x2598;
+        byte[] rawName = new byte[nameLength];
+        System.arraycopy(saveData, trainerNameOffset, rawName, 0, nameLength);
+        trainerName = japanese ? new JapaneseString() : new WesternString();
+        trainerName.addAll(rawName);
     }
 
     public Pokemon getPartyPokemon(int index){
@@ -111,6 +129,22 @@ public class SaveFile {
         }
 
         return boxes[boxNumber][pokemonIndex];
+    }
+
+    public String getPath(){
+        return path;
+    }
+
+    public void setPath(String path){
+        this.path = path;
+    }
+
+    public int getTrainerId(){
+        return trainerId;
+    }
+
+    public InGameString getTrainerName(){
+        return trainerName;
     }
 
     public void storePokemonInParty(int index, Pokemon pokemon) throws IOException {

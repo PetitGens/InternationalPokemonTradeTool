@@ -19,17 +19,17 @@ public class Pokemon {
     private int currentHp;
     private int level;
     private int statusCondition;
-    private int[] types = new int[2];
+    private final int[] types = new int[2];
     private int catchRate;
-    private int[] moves = new int[4];
+    private final int[] moves = new int[4];
     private int trainerId;
     private int exp;
-    private int[] evs = new int[5];
+    private final int[] evs = new int[5];
 
     private int iv_field;
-    private int[] ivs = new int[5];
-    private int[] movesPps = new int[4];
-    private int[] stats = new int[5];
+    private final int[] ivs = new int[5];
+    private final int[] movesPps = new int[4];
+    private final int[] stats = new int[5];
     private InGameString trainerName;
     private InGameString nickname;
     private boolean japanese;
@@ -95,13 +95,13 @@ public class Pokemon {
         rawData = new byte[data.length];
         System.arraycopy(data, 0, rawData, 0, rawData.length);
 
-        parsePokemonDate();
+        parsePokemonData();
     }
 
     /**
      * A method used in the constructor to put all the Pokémon's data at the right variable
      */
-    private void parsePokemonDate(){
+    private void parsePokemonData(){
         boolean inParty = false;
 
         if(rawData.length == 44){
@@ -351,7 +351,7 @@ public class Pokemon {
 
     private void calculateStats(){
         // Get base stats
-        int baseStats[] = new int[5];
+        int[] baseStats = new int[5];
         baseStats[0] = specie.getBaseHP();
         baseStats[1] = specie.getBaseAttack();
         baseStats[2] = specie.getBaseDefense();
