@@ -310,8 +310,17 @@ public class Pokemon {
     public InGameString getNickname() {
         return nickname;
     }
+
+    /**
+     * Returns if the Pokémon is currently in a Japanese save file.
+     * @return true is japanese, false otherwise
+     */
     public boolean isJapanese(){return japanese;}
 
+    /**
+     * Returns the Pokémon's raw data as if it were in the party.
+     * @return -> an array containing all the Pokémon's data
+     */
     public byte[] toPartyRawData(){
         if(rawData.length == 44){
             return rawData.clone();
@@ -334,6 +343,10 @@ public class Pokemon {
         return returnArray;
     }
 
+    /**
+    * Returns the Pokémon's raw data as if it were in a box.
+    * @return -> an array containing all the Pokémon's data
+    */
     public byte[] toBoxRawData(){
         if(rawData.length == 33){
             return rawData.clone();
@@ -349,6 +362,11 @@ public class Pokemon {
         return returnArray;
     }
 
+    /**
+     * Calculate the Pokémon's stats based on it's base stats (specie-dependants), IVs and EVs.
+     * This is used for Pokémon stored in a box since the game does not store the stats in this case, they are
+     * calculated when the Pokémon is withdrawn.
+     */
     private void calculateStats(){
         // Get base stats
         int[] baseStats = new int[5];
@@ -369,6 +387,9 @@ public class Pokemon {
         }
     }
 
+    /**
+     * Just the constructor for the special Pokémon BLANK_SPACE
+     */
     private Pokemon(){
         specie = Specie.BLANK_SPACE;
     }

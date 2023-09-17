@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * This class is used to read and write data from a Pokémon Red, Green, Blue, Yellow, Gold, Silver or Crystal save file.
+ * It also detects the generation (RBY or GSC) and the region of the game the save file is from.
+ * @author Julien Ait azzouzene
+ */
 public class SaveFile {
     private String path;
 
@@ -30,6 +35,12 @@ public class SaveFile {
     private final int trainerId;
     private final InGameString trainerName;
 
+    /**
+     * Reads the save file located at the given path.
+     * @param path -> the save file path
+     * @throws IOException -> if the file opening fails or if the save file has some problem
+     * (for instance, bad checksums, illegal data, ...)
+     */
     public SaveFile(String path) throws IOException {
         this.path = path;
         byte[] saveData = Files.readAllBytes(Path.of(path));
