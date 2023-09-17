@@ -198,7 +198,7 @@ public class SaveFile {
      * @param index -> the index in the party where the Pokémon should be placed (starts at 0).
      * @param pokemon -> the Pokémon to store
      * @throws IOException -> if the file writing fails
-     * @throws IllegalArgumentException -> if the index is illegal, if there is no Pokémon at that index or if the
+     * @throws IllegalArgumentException -> if the index is illegal, or if there is no Pokémon at that index or if the
      * Pokémon is not in the same format as the save file (it must be converted beforehand)
      */
     public void storePokemonInParty(int index, Pokemon pokemon) throws IOException {
@@ -228,7 +228,7 @@ public class SaveFile {
      * @param pokemonIndex -> the index in the box where the Pokémon should be placed (starts at 0)
      * @param pokemon -> the Pokémon to store
      * @throws IOException -> if the file writing fails
-     * @throws IllegalArgumentException -> if the index is illegal, if there is no Pokémon at that location or if the
+     * @throws IllegalArgumentException -> if the index is illegal, or if there is no Pokémon at that location or if the
      * Pokémon is not in the same format as the save file (it must be converted beforehand)
      */
     public void storePokemonInBox(int boxNumber, int pokemonIndex, Pokemon pokemon) throws IOException {

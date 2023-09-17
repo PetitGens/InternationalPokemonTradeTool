@@ -8,7 +8,7 @@ import java.util.Arrays;
  * A character string in a special encoding depending on the language of the game.
  * It has a size limit of 10 useful characters since no in-game strings used in this program should be longer than that.
  * This string always ends with an eleventh character with the value 0x50 as a delimiter, like the one used in the game.
- * "Characters" refer to 8 bits values (stored as byte here) like it's coded in the game.
+ * "Characters" refer to 8-bits values (stored as byte here) like it's coded in the game.
  * @see WesternString
  * @see JapaneseString
  * @author Julien Ait azzouzene
@@ -22,7 +22,7 @@ public abstract class InGameString {
     /**
      * Adds the specified encoded character to the string.
      * @param character -> the character to add, in the right encoding depending on the game
-     * @throws IllegalArgumentException if the character is illegal for the game or if there is no room for a new
+     * @throws IllegalArgumentException if the character is illegal for the game, or if there is no room for a new
      * character
      */
     public void add(byte character){
@@ -49,11 +49,11 @@ public abstract class InGameString {
 
     /**
      * Writes every character in the string from the specified array.
-     * The array can have a 0x50 delimiter, but that's not mandatory ; if it does, the characters beyond the delimiter
+     * The array can have a 0x50 delimiter, but that's not mandatory; if it does, the characters beyond the delimiter
      * won't be written.
-     * The method puts a delimiter after the written area, so this effectively erase all characters present
+     * The method puts a delimiter after the written area, so this effectively erases all characters present
      * before the method call.
-     * @param array -> the array from which the character are read
+     * @param array -> the array from which the characters are read
      */
     public abstract void addAll(byte[] array);
 
@@ -91,7 +91,7 @@ public abstract class InGameString {
      * Sets the character located at the specified index to the specified value
      * @param character -> the value to write at the index location
      * @param index -> the location of the character to write
-     * @throws IllegalArgumentException if the index is out of bounds or if the specified character is illegal for the
+     * @throws IllegalArgumentException if the index is out of bounds, or if the specified character is illegal for the
      * game
      */
     public void set(byte character, int index){
@@ -121,13 +121,13 @@ public abstract class InGameString {
     /**
      * (currently unimplemented) Replaces all the string's characters from the regular Java String given as parameter
      * @param string -> the String to read from
-     * @throws IllegalArgumentException if the given string contains characters that aren't in the game
+     * @throws IllegalArgumentException if the given string contains characters, that aren't in the game
      */
     public abstract void fromString(String string);
 
     /**
      * Returns the number of characters in the given array (excluding delimiter). It's mostly made for strings that
-     * contains a 0x50 delimiter, as otherwise it just returns the length of the array.
+     * contain a 0x50 delimiter, as otherwise it just returns the length of the array.
      * @param string -> An array of encoded characters that the method will count.
      * @return the number of characters
      */
