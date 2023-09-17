@@ -2,8 +2,8 @@ package main.java.tradingEngine.gameData;
 
 /**
  * An enumeration used to store information about every Pokémon, like their index number of name in each language.
- * "Missingno" is meant for glitch Pokémon (i.e. those who don't have a legal index number). "BLANK_SPACE" is used as a
- * placeholder for spaces in the porty or in a box.
+ * "Missingno" is meant for glitch Pokémon (i.e., those who don't have a legal index number).
+ * "BLANK_SPACE" is used as a placeholder for spaces in the porty or in a box.
  * @author Julien Ait azzouzene
  */
 public enum Specie {
@@ -313,58 +313,117 @@ public enum Specie {
         }
     }
 
+    /**
+     * Returns the specie's internal number in RBY. This is only exact for valid Gen1 Pokémon as Missingno sees its
+     * index set to -1, because handling all the variants of Missingno is boring.
+     * @return -> the Gen1 index
+     */
     public int getGen1Index() {
         return gen1Index;
     }
 
+    /**
+     * Returns the specie's internal number in GSC. This is only exact for valid Gen2 Pokémon as Missingno sees its
+     * index set to -1, because handling all the variants of Missingno is boring.
+     * @return -> the Gen2 index
+     */
     public int getGen2Index() {
         return gen2Index;
     }
 
+    /**
+     * Returns the specie's name in english.
+     * @return -> the english name
+     */
     public String getEnglishName() {
         return englishName;
     }
 
+    /**
+     * Returns the specie's name in japanese.
+     * @return -> the japanese name
+     */
     public String getJapaneseName() {
         return japaneseName;
     }
 
+    /**
+     * Returns the specie's name in French.
+     * @return -> the French name
+     */
     public String getFrenchName() {
         return frenchName;
     }
 
+    /**
+     * Returns the specie's name in german.
+     * @return -> the german name
+     */
     public String getGermanName() {
         return germanName;
     }
 
+    /**
+     * Returns the specie's name in korean.
+     * @return -> the korean name
+     */
     public String getKoreanName() {
         return koreanName;
     }
 
+    /**
+     * Returns the specie's base HP stat.
+     * @return -> the specie's base HP
+     */
     public int getBaseHP() {
         return baseHP;
     }
 
+    /**
+     * Returns the specie's base attack stat.
+     * @return -> the specie's base attack
+     */
     public int getBaseAttack() {
         return baseAttack;
     }
 
+    /**
+     * Returns the specie's base defense stat.
+     * @return -> the specie's base defense
+     */
     public int getBaseDefense() {
         return baseDefense;
     }
 
+    /**
+     * Returns the specie's base speed stat.
+     * @return -> the specie's base speed
+     */
     public int getBaseSpeed() {
         return baseSpeed;
     }
 
+    /**
+     * Returns the specie's base special stat. This stat only exists in Gen1 and was back then used as both Special
+     * Attack and Special Defense
+     * @return -> the specie's base special
+     */
     public int getBaseSpecial() {
         return baseSpecial;
     }
 
+    /**
+     * Returns the specie's base special attack stat. This stat only exists Gen2 onwards, replacing Gen1 special.
+     * @return -> the specie's base special attack
+     */
     public int getBaseSpecialAttack() {
         return baseSpecialAttack;
     }
 
+    /**
+     * Returns the specie's base special defense stat. This stat only exists Gen2 onwards, replacing Gen1 special.
+     * @return -> the specie's base special defense
+     */
     public int getBaseSpecialDefense() {
         return baseSpecialDefense;
     }

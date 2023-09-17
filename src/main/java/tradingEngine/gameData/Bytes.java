@@ -37,10 +37,20 @@ public interface Bytes {
         return 0x10000 * byteToUnsignedByte(high_byte) + twoBytesToInt(mid_byte, low_byte);
     }
 
+    /**
+     * Returns the upper byte of a 16 bits value.
+     * @param value -> the 16 bits value to read from
+     * @return -> the 8 first bits of the given 16 bits value.
+     */
     public static byte getHighByteFrom2BytesValue(int value){
         return (byte)((value >> 8) & 0xFF);
     }
 
+    /**
+     * Returns the lower byte of a 16 bits value.
+     * @param value -> the 16 bits value to read from
+     * @return -> the 8 last bits of the given 16 bits value.
+     */
     public static byte getLowByteFrom2BytesValue(int value){
         return (byte)(value & 0xFF);
     }
