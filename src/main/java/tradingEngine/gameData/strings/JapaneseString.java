@@ -58,6 +58,20 @@ public class JapaneseString extends InGameString{
 
     @Override
     public void fromString(String string) {
-        //TODO build InGameString from regular String
+        if(string.length() > InGameString.MAX_SIZE - 1){
+            throw new IllegalArgumentException("string too long");
+        }
+        char[] charArray = string.toCharArray();
+
+        int i = 0;
+        for( i = 0; i < string.length(); i++){
+            InGameJapaneseCharacter inGameCharacter = InGameJapaneseCharacter.fromRegularCharacter(charArray[i]);
+            if (inGameCharacter == null){
+                throw new IllegalArgumentException("illegal character in string");
+            }
+            array[i] = inGameCharacter.value;
+        }
+        length = i;
+        array[i] = InGameJapaneseCharacter.DELIMITER.value;
     }
 }

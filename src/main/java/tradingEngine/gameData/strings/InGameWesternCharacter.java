@@ -104,4 +104,13 @@ public enum InGameWesternCharacter {
         }
         return null;
     }
+
+    public static InGameWesternCharacter fromRegularCharacter(char character){
+        for(InGameWesternCharacter inGameCharacter : values()){
+            if(inGameCharacter.character == character){
+                return inGameCharacter;
+            }
+        }
+        return null;
+    }
 }

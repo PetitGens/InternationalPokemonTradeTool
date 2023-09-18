@@ -186,4 +186,13 @@ public enum InGameJapaneseCharacter {
         }
         return null;
     }
+
+    public static InGameJapaneseCharacter fromRegularCharacter(char character){
+        for(InGameJapaneseCharacter inGameCharacter : values()){
+            if(inGameCharacter.character == character){
+                return inGameCharacter;
+            }
+        }
+        return null;
+    }
 }

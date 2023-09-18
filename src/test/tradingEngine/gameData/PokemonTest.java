@@ -127,6 +127,33 @@ public class PokemonTest {
         assertArrayEquals(expectedData, venusaur.toBoxRawData());
     }
 
+    @Test
+    public void setWesternNamesTest(){
+        byte[] data = partyPokemonData();
+        byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+        Pokemon pokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
+
+        pokemon.setNickname("FLORIZARRE");
+        pokemon.setTrainerName("PtJean");
+
+        assertEquals("FLORIZARRE", pokemon.getNickname().toString());
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+    }
+
+    @Test
+    public void setJapaneseNamesTest(){
+        byte[] data = partyPokemonData();
+        byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+        Pokemon pokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
+        pokemon.setLanguage(Language.JAPANESE);
+
+        pokemon.setNickname("フシギバナ");
+        pokemon.setTrainerName("ばか");
+
+        assertEquals("フシギバナ", pokemon.getNickname().toString());
+        assertEquals("ばか", pokemon.getTrainerName().toString());
+    }
+
     public static byte[] partyPokemonData(){
         return new byte[]{
                 (byte) 0x9A,

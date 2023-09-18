@@ -370,6 +370,24 @@ public class Pokemon {
         }
     }
 
+    public void setNickname(String nickname){
+        int nicknameMaxLength = language == Language.JAPANESE ? 5 : 10;
+        if(nickname.length() > nicknameMaxLength){
+            throw new IllegalArgumentException(String.format("name too long for %s Pokémon", language.name()));
+        }
+
+        this.nickname.fromString(nickname);
+    }
+
+    public void setTrainerName(String trainerName){
+        int trainerNameMaxLength = language == Language.JAPANESE ? 5 : 7;
+        if(trainerName.length() > trainerNameMaxLength){
+            throw new IllegalArgumentException(String.format("name too long for %s Pokémon", language.name()));
+        }
+
+        this.trainerName.fromString(trainerName);
+    }
+
     /**
      * Calculate the Pokémon's stats based on it's base stats (specie-dependants), IVs and EVs.
      * This is used for Pokémon stored in a box since the game does not store the stats in this case, they are
