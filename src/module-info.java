@@ -1,4 +1,5 @@
 module InternationalPokemonTradeTool {
-    requires org.junit.jupiter.api;
     requires junit;
+    exports test.tradingEngine.gameData;
+    exports test.tradingEngine.gameData.strings;
 }

@@ -2,14 +2,14 @@ package test.tradingEngine.gameData.strings;
 
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
 import main.java.tradingEngine.gameData.strings.WesternString;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class WesternStringTest {
+public class WesternStringTest {
 
     @Test
-    void addTest(){
+    public void addTest(){
         WesternString westernString = new WesternString();
         westernString.add(InGameWesternCharacter.CAPITAL_A.value);
 
@@ -20,7 +20,7 @@ class WesternStringTest {
     }
 
     @Test
-    void isCharacterValidTest(){
+    public void isCharacterValidTest(){
         WesternString westernString = new WesternString();
 
         assertTrue(westernString.isCharacterValid(InGameWesternCharacter.CAPITAL_A.value));
@@ -37,7 +37,7 @@ class WesternStringTest {
     }
 
     @Test
-    void addAll(){
+    public void addAll(){
         byte[] validArray = {
                 InGameWesternCharacter.CAPITAL_A.value,
                 InGameWesternCharacter.CAPITAL_B.value,
@@ -113,7 +113,7 @@ class WesternStringTest {
     }
 
     @Test
-    void removeTest(){
+    public void removeTest(){
         byte[] validArray = {
                 InGameWesternCharacter.CAPITAL_A.value,
                 InGameWesternCharacter.CAPITAL_B.value,
@@ -146,7 +146,7 @@ class WesternStringTest {
     }
 
     @Test
-    void setTest(){
+    public void setTest(){
         byte[] validArray = {
                 InGameWesternCharacter.CAPITAL_A.value,
                 InGameWesternCharacter.CAPITAL_B.value,
@@ -181,7 +181,7 @@ class WesternStringTest {
     }
 
     @Test
-    void toStringTest(){
+    public void toStringTest(){
         WesternString machopName = new WesternString();
         byte[] machopCharacters = {
                 InGameWesternCharacter.CAPITAL_M.value,

@@ -1,8 +1,6 @@
 package main.java.tradingEngine.gameData;
 
-import main.java.tradingEngine.gameData.strings.JapaneseString;
-import main.java.tradingEngine.gameData.strings.InGameString;
-import main.java.tradingEngine.gameData.strings.WesternString;
+import main.java.tradingEngine.gameData.strings.*;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,14 +23,12 @@ public class Pokemon {
     private int trainerId;
     private int exp;
     private final int[] evs = new int[5];
-
-    private int iv_field;
     private final int[] ivs = new int[5];
     private final int[] movesPps = new int[4];
     private final int[] stats = new int[5];
     private InGameString trainerName;
     private InGameString nickname;
-    private boolean japanese;
+    private Language language;
     private byte[] rawData;
 
     /**
@@ -41,15 +37,16 @@ public class Pokemon {
      * @param data -> an array containing every single byte in a Pokémon's main data
      * @param trainerName -> the original trainer name as an encoded in-game string
      * @param nickname -> the Pokémon's nickname as an encoded in-game string
-     * @param japanese -> whether the Pokémon's is stored on a Japanese game
+     * @param language -> the Pokémon's language (Japanese or Western)
      * @see InGameString
      */
-    public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, boolean japanese) {
-        this.japanese = japanese;
+    public Pokemon(byte[] data, byte[] trainerName, byte[] nickname, Language language) {
+        this.language = language == Language.JAPANESE ? Language.JAPANESE : Language.WESTERN;
+
         int trainerNameLength = InGameString.stringLength(trainerName);
         int nicknameLength = InGameString.stringLength(nickname);
 
-        if(japanese){
+        if(language == Language.JAPANESE){
             if(trainerNameLength > 5){
                 throw new IllegalArgumentException("trainerName is too long");
             }
@@ -69,7 +66,7 @@ public class Pokemon {
 
         // Beyond this point, nickname and trainer name have normal sizes
 
-        if(japanese){
+        if(language == Language.JAPANESE){
             this.trainerName = new JapaneseString();
             this.nickname = new JapaneseString();
         }
@@ -153,15 +150,13 @@ public class Pokemon {
         }
 
         // IVs
-        iv_field = Bytes.twoBytesToInt(rawData[0x1B], rawData[0x1C]);
-
-        int iv_copy = iv_field;
+        int ivField = Bytes.twoBytesToInt(rawData[0x1B], rawData[0x1C]);
         ivs[0] = 0;
 
         for(int i = 0; i < 4; i++){
-            ivs[4 - i] = iv_copy & 0xF;
+            ivs[4 - i] = ivField & 0xF;
             ivs[0] += (ivs[4 - i] % 2) << i;
-            iv_copy = iv_copy >> 4;
+            ivField = ivField >> 4;
         }
 
         // Calculate stats if in a box
@@ -261,14 +256,6 @@ public class Pokemon {
     }
 
     /**
-     * Returns the raw IV field (meaning all the IVs put together in a 16 bits number).
-     * @return the IV field.
-     */
-    public int getIv_field() {
-        return iv_field;
-    }
-
-    /**
      * Returns an array containing every the individual value of every stat in the following order : HP, ATTACK, DEFENSE,
      * SPEED, SPECIAL (in Gen2, Special Attack and Special Defense share the same EV and IV).
      * @return the IVs.
@@ -310,12 +297,6 @@ public class Pokemon {
     public InGameString getNickname() {
         return nickname;
     }
-
-    /**
-     * Returns if the Pokémon is currently in a Japanese save file.
-     * @return true is japanese, false otherwise
-     */
-    public boolean isJapanese(){return japanese;}
 
     /**
      * Returns the Pokémon's raw data as if it were in the party.
@@ -362,6 +343,33 @@ public class Pokemon {
         return returnArray;
     }
 
+    public Language getLanguage(){
+        return language;
+    }
+
+    public void setLanguage(Language language){
+        if(this.language.equals(language)){
+            return;
+        }
+
+        if(language.equals(Language.KOREAN)){
+            throw new IllegalArgumentException("korean is not supported by Gen1 games");
+        }
+
+        if(language.equals(Language.JAPANESE)){
+            nickname = new JapaneseString();
+            trainerName = new JapaneseString();
+            nickname.add(InGameJapaneseCharacter.KATAKANA_A.value);
+            trainerName.add(InGameJapaneseCharacter.KATAKANA_A.value);
+        }
+        else { // Western Language
+            nickname = new WesternString();
+            trainerName = new WesternString();
+            nickname.add(InGameWesternCharacter.CAPITAL_A.value);
+            trainerName.add(InGameWesternCharacter.CAPITAL_A.value);
+        }
+    }
+
     /**
      * Calculate the Pokémon's stats based on it's base stats (specie-dependants), IVs and EVs.
      * This is used for Pokémon stored in a box since the game does not store the stats in this case, they are
@@ -399,12 +407,12 @@ public class Pokemon {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return indexNumber == pokemon.indexNumber && currentHp == pokemon.currentHp && level == pokemon.level && statusCondition == pokemon.statusCondition && catchRate == pokemon.catchRate && trainerId == pokemon.trainerId && exp == pokemon.exp && japanese == pokemon.japanese && Arrays.equals(types, pokemon.types) && Arrays.equals(moves, pokemon.moves) && Arrays.equals(evs, pokemon.evs) && Arrays.equals(ivs, pokemon.ivs) && Arrays.equals(movesPps, pokemon.movesPps) && Arrays.equals(stats, pokemon.stats) && trainerName.equals(pokemon.trainerName) && nickname.equals(pokemon.nickname);
+        return indexNumber == pokemon.indexNumber && currentHp == pokemon.currentHp && level == pokemon.level && statusCondition == pokemon.statusCondition && catchRate == pokemon.catchRate && trainerId == pokemon.trainerId && exp == pokemon.exp && language == pokemon.language && Arrays.equals(types, pokemon.types) && Arrays.equals(moves, pokemon.moves) && Arrays.equals(evs, pokemon.evs) && Arrays.equals(ivs, pokemon.ivs) && Arrays.equals(movesPps, pokemon.movesPps) && Arrays.equals(stats, pokemon.stats) && trainerName.equals(pokemon.trainerName) && nickname.equals(pokemon.nickname);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(indexNumber, currentHp, level, statusCondition, catchRate, trainerId, exp, trainerName, nickname, japanese);
+        int result = Objects.hash(indexNumber, currentHp, level, statusCondition, catchRate, trainerId, exp, trainerName, nickname);
         result = 31 * result + Arrays.hashCode(types);
         result = 31 * result + Arrays.hashCode(moves);
         result = 31 * result + Arrays.hashCode(evs);

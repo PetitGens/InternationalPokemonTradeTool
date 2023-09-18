@@ -1,22 +1,23 @@
 package test.tradingEngine.gameData;
 
+import main.java.tradingEngine.gameData.Language;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.SaveFile;
 import main.java.tradingEngine.gameData.Specie;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class SaveFileTest {
+public class SaveFileTest {
     private static final String resourcesPath = "src/main/resources/tradingEngine/gameData/";
     
     @Test
-    void westernSaveTest() throws IOException {
+    public void westernSaveTest() throws IOException {
         Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
@@ -41,7 +42,7 @@ class SaveFileTest {
     }
 
     @Test
-    void japaneseSaveTest() throws IOException{
+    public void japaneseSaveTest() throws IOException{
         Files.copy(Path.of(resourcesPath + "jap.sav"), Path.of(resourcesPath + "copy_jap.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
@@ -60,7 +61,7 @@ class SaveFileTest {
     }
 
     @Test
-    void isWesternTest() throws IOException {
+    public void isWesternTest() throws IOException {
         byte[] jap = Files.readAllBytes(Path.of(resourcesPath + "jap.sav"));
         byte[] fr = Files.readAllBytes(Path.of(resourcesPath + "save.sav"));
 
@@ -69,7 +70,7 @@ class SaveFileTest {
     }
 
     @Test
-    void isJapaneseTest() throws IOException {
+    public void isJapaneseTest() throws IOException {
         byte[] jap = Files.readAllBytes(Path.of(resourcesPath + "jap.sav"));
         byte[] fr = Files.readAllBytes(Path.of(resourcesPath + "save.sav"));
 
@@ -78,7 +79,7 @@ class SaveFileTest {
     }
 
     @Test
-    void gettersExceptionsTest() throws IOException {
+    public void gettersExceptionsTest() throws IOException {
         SaveFile fr = new SaveFile(resourcesPath + "save.sav");
         SaveFile jap = new SaveFile(resourcesPath + "jap.sav");
 
@@ -110,7 +111,7 @@ class SaveFileTest {
     }
 
     @Test
-    void westernPartyPokemonWritingTest() throws IOException{
+    public void westernPartyPokemonWritingTest() throws IOException{
     	Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
@@ -122,7 +123,7 @@ class SaveFileTest {
                         (byte) 0x8E,
                         (byte) 0x83,
                         (byte) 0x8E,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInParty(4, newPartyPokemon);
 
@@ -136,7 +137,7 @@ class SaveFileTest {
     }
 
     @Test
-    void westernBoxPokemonWritingTest() throws IOException{
+    public void westernBoxPokemonWritingTest() throws IOException{
         Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
@@ -148,7 +149,7 @@ class SaveFileTest {
                         (byte) 0x84,
                         (byte) 0x80,
                         (byte) 0x85,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInBox(0, 3, newBoxPokemon);
 
@@ -162,7 +163,7 @@ class SaveFileTest {
     }
     
     @Test
-    void westernCurrentBoxPokemonWritingTest() throws IOException{
+    public void westernCurrentBoxPokemonWritingTest() throws IOException{
         Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
@@ -174,7 +175,7 @@ class SaveFileTest {
                         (byte) 0x84,
                         (byte) 0x80,
                         (byte) 0x85,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInBox(1, 19, newBoxPokemon);
 

@@ -3,13 +3,13 @@ package test.tradingEngine.gameData.strings;
 import main.java.tradingEngine.gameData.strings.InGameString;
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
 import main.java.tradingEngine.gameData.strings.WesternString;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class InGameStringTest {
+public class InGameStringTest {
 	@Test
-	void stringLengthTest(){
+	public void stringLengthTest(){
 		byte[] validArray = {
 				InGameWesternCharacter.CAPITAL_A.value,
 				InGameWesternCharacter.CAPITAL_B.value,
@@ -43,7 +43,7 @@ class InGameStringTest {
 	}
 	
 	@Test
-	void toArrayTest() {
+	public void toArrayTest() {
 		byte[] validArray = {
 				InGameWesternCharacter.CAPITAL_A.value,
 				InGameWesternCharacter.CAPITAL_B.value,
