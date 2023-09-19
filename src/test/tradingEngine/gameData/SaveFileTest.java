@@ -14,7 +14,7 @@ import java.nio.file.StandardCopyOption;
 import static org.junit.Assert.*;
 
 public class SaveFileTest {
-    private static final String resourcesPath = "src/main/resources/tradingEngine/gameData/";
+    private static final String resourcesPath = "src/main/resources/tradingEngine/";
     
     @Test
     public void westernSaveTest() throws IOException {
