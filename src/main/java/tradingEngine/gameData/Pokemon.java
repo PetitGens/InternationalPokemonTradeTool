@@ -356,6 +356,8 @@ public class Pokemon {
             throw new IllegalArgumentException("korean is not supported by Gen1 games");
         }
 
+        this.language = language;
+
         if(language.equals(Language.JAPANESE)){
             nickname = new JapaneseString();
             trainerName = new JapaneseString();
@@ -363,6 +365,7 @@ public class Pokemon {
             trainerName.add(InGameJapaneseCharacter.KATAKANA_A.value);
         }
         else { // Western Language
+            language = Language.WESTERN;
             nickname = new WesternString();
             trainerName = new WesternString();
             nickname.add(InGameWesternCharacter.CAPITAL_A.value);
@@ -438,5 +441,17 @@ public class Pokemon {
         result = 31 * result + Arrays.hashCode(movesPps);
         result = 31 * result + Arrays.hashCode(stats);
         return result;
+    }
+
+    public boolean isNicknamed(){
+        for (Language language : Language.values()){
+            if(language == Language.WESTERN){
+                continue;
+            }
+            if(nickname.toString().equals(specie.getName(language))){
+                return false;
+            }
+        }
+        return true;
     }
 }

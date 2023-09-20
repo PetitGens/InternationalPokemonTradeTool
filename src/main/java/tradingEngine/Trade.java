@@ -43,7 +43,7 @@ public class Trade {
             noConversionTrade(pokemon1InParty, pokemonIndex1, boxIndex1, pokemon2InParty, pokemonIndex2, boxIndex2);
         }
         else{
-            throw new RuntimeException("not implemented yet");
+            conversionTrade(pokemon1InParty, pokemonIndex1, boxIndex1, pokemon2InParty, pokemonIndex2, boxIndex2);
         }
     }
 
@@ -83,6 +83,29 @@ public class Trade {
         }
         else{
             saveFile2.storePokemonInBox(boxIndex2, pokemonIndex2, pokemon[0]);
+        }
+    }
+
+    private void conversionTrade(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
+                                 boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
+        Pokemon[] tradedPokemon = getTradedPokemon(pokemon1InParty, pokemonIndex1, boxIndex1,
+                pokemon2InParty, pokemonIndex2, boxIndex2);
+
+        convertPokemonLanguage(tradedPokemon[0], saveFile2.getLanguage());
+        convertPokemonLanguage(tradedPokemon[1], saveFile1.getLanguage());
+
+        storeTradedPokemon(tradedPokemon, pokemon1InParty, pokemonIndex1, boxIndex1,
+                pokemon2InParty, pokemonIndex2, boxIndex2);
+    }
+
+    private void convertPokemonLanguage(Pokemon pokemon, Language newLanguage){
+        //TODO ask the user a nickname if the Pokemon is nicknamed
+        //TODO ask the user a new trainer Name
+        boolean nicknamed = pokemon.isNicknamed();
+        pokemon.setLanguage(newLanguage);
+
+        if(! nicknamed){
+            pokemon.setNickname(pokemon.getSpecie().getName(newLanguage));
         }
     }
 }

@@ -426,6 +426,19 @@ public enum Specie {
     public int getBaseSpecialDefense() {
         return baseSpecialDefense;
     }
+    
+    public String getName(Language language){
+        String specieName;
+        switch (language){
+            case ENGLISH, SPANISH, ITALIAN -> specieName = englishName;
+            case JAPANESE -> specieName = japaneseName;
+            case FRENCH -> specieName = frenchName;
+            case GERMAN -> specieName = germanName;
+            case KOREAN -> specieName = koreanName;
+            default -> throw new IllegalArgumentException("invalid language");
+        }
+        return specieName;
+    }
 
     /**
      * Returns the Specie corresponding to the given index number for a Gen1 Pokémon.
