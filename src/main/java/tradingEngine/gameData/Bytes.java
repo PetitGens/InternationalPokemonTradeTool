@@ -12,7 +12,7 @@ public abstract class Bytes {
      * @param value -> the signed value to convert
      * @return the converted unsigned value
      */
-    static int byteToUnsignedByte(byte value){
+    public static int byteToUnsignedByte(byte value){
         return (int) value & 0xff;
     }
 
@@ -22,7 +22,7 @@ public abstract class Bytes {
      * @param low_byte -> the eight rightmost bits
      * @return the converted 16-bits value
      */
-    static int twoBytesToInt(byte high_byte, byte low_byte){
+    public static int twoBytesToInt(byte high_byte, byte low_byte){
         return 0x100 * byteToUnsignedByte(high_byte) + byteToUnsignedByte(low_byte);
     }
 
@@ -33,7 +33,7 @@ public abstract class Bytes {
      * @param low_byte -> the eight rightmost bits
      * @return the converted 16-bits value
      */
-    static int threeBytesToInt(byte high_byte, byte mid_byte, byte low_byte){
+    public static int threeBytesToInt(byte high_byte, byte mid_byte, byte low_byte){
         return 0x10000 * byteToUnsignedByte(high_byte) + twoBytesToInt(mid_byte, low_byte);
     }
 
@@ -42,7 +42,7 @@ public abstract class Bytes {
      * @param value -> the 16-bits value to read from
      * @return -> the 8 first bits of the given 16-bits value.
      */
-    static byte getHighByteFrom2BytesValue(int value){
+    public static byte getHighByteFrom2BytesValue(int value){
         return (byte)((value >> 8) & 0xFF);
     }
 
@@ -51,7 +51,7 @@ public abstract class Bytes {
      * @param value -> the 16-bits value to read from
      * @return -> the 8 last bits of the given 16-bits value.
      */
-    static byte getLowByteFrom2BytesValue(int value){
+    public static byte getLowByteFrom2BytesValue(int value){
         return (byte)(value & 0xFF);
     }
 }
