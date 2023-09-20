@@ -7,8 +7,23 @@ import main.java.tradingEngine.gameData.SaveFile;
 import java.io.IOException;
 
 public class Trade {
-    SaveFile saveFile1;
-    SaveFile saveFile2;
+    SaveFile saveFile1 = null;
+    SaveFile saveFile2 = null;
+
+    public Trade(){}
+
+    public Trade(SaveFile saveFile1, SaveFile saveFile2){
+        this.saveFile1 = saveFile1;
+        this.saveFile2 = saveFile2;
+    }
+
+    public void setSaveFile(int index, SaveFile saveFile){
+        switch (index) {
+            case 0 -> saveFile1 = saveFile;
+            case 1 -> saveFile2 = saveFile;
+            default -> throw new IllegalArgumentException("invalid save index");
+        }
+    }
 
     public void openSaveFile(int index, String path) throws IOException {
         switch (index) {
@@ -28,6 +43,11 @@ public class Trade {
 
     public void trade(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                       boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
+
+        if(saveFile1 == null ||saveFile2 == null){
+            throw new NullPointerException("one of the two save file has not been set properly");
+        }
+
         Language save1Language = saveFile1.getLanguage();
         Language save2Language = saveFile2.getLanguage();
 
@@ -63,7 +83,7 @@ public class Trade {
                     saveFile1.getPartyPokemon(pokemonIndex1) :
                     saveFile1.getBoxPokemon(boxIndex1, pokemonIndex1);
         pokemon[1] = pokemon2InParty ?
-                    saveFile1.getPartyPokemon(pokemonIndex2):
+                    saveFile2.getPartyPokemon(pokemonIndex2):
                     saveFile2.getBoxPokemon(boxIndex2, pokemonIndex2);
 
         return pokemon;

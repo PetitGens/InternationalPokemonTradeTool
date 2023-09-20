@@ -430,12 +430,11 @@ public enum Specie {
     public String getName(Language language){
         String specieName;
         switch (language){
-            case ENGLISH, SPANISH, ITALIAN -> specieName = englishName;
             case JAPANESE -> specieName = japaneseName;
             case FRENCH -> specieName = frenchName;
             case GERMAN -> specieName = germanName;
             case KOREAN -> specieName = koreanName;
-            default -> throw new IllegalArgumentException("invalid language");
+            default -> specieName = englishName;
         }
         return specieName;
     }
