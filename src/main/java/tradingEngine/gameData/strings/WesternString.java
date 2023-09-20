@@ -76,33 +76,4 @@ public class WesternString extends InGameString{
         length = i;
         array[i] = InGameWesternCharacter.DELIMITER.value;
     }
-
-    /**
-     * Convert a hexadecimal encoded in-game string to a translated String
-     * @param hexString -> the encoded in-game string as a hexadecimal String
-     * @return the converted String
-     */
-    public static String hexToString(String hexString){
-        int stringLength = hexString.length();
-        if(stringLength % 2 != 0){
-            throw new IllegalArgumentException("hex string should have an even number of character");
-        }
-
-        StringBuilder returnString = new StringBuilder();
-
-        for(int i = 0; i < stringLength; i += 2){
-            String parsable = "0x" + hexString.substring(i, i + 2);
-            byte value = Integer.decode(parsable).byteValue();
-
-            InGameWesternCharacter westChar = InGameWesternCharacter.characterFromValue(value);
-
-            if(westChar == null){
-                throw new IllegalArgumentException("illegal character : " + parsable);
-            }
-
-            returnString.append(westChar.character);
-        }
-
-        return returnString.toString();
-    }
 }
