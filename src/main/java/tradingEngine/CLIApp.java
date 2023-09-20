@@ -7,10 +7,19 @@ import main.java.tradingEngine.gameData.Specie;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CliApp {
+/**
+ * Application class that runs a command-line-interface.
+ * The latter allows the user to trade between two save files, by first inputting the save files' paths, and then
+ * inputting the two Pokémon's positions.
+ * @author Julien Ait azzouzene
+ */
+public class CLIApp {
 
     private static Scanner scanner;
 
+    /**
+     * The application's main class.
+     */
     public static void main(String[] args){
         scanner = new Scanner(System.in);
 
@@ -38,6 +47,11 @@ public class CliApp {
         }
     }
 
+    /**
+     * Asks the user for the save file's path, and then tries to open and return it.
+     * @param i -> the save file's number, just for display (either 1 or 2)
+     * @return -> the just opened save file
+     */
     private static SaveFile saveFilePathInput(int i){
         SaveFile saveFile = null;
         do {
@@ -54,6 +68,13 @@ public class CliApp {
         return saveFile;
     }
 
+    /**
+     * Asks the user for the position of a Pokémon (either one number if it's in the party, or two if it's in a box).
+     * @param saveIndex -> the save file's number, just for display (either 1 or 2)
+     * @param saveFile -> the save file the Pokémon is located on
+     * @return -> an array of two integers : the first one is the Pokémon index, the second one is the box number or a
+     * negative number if the Pokémon is in the party
+     */
     private static int[] inputPokemonPosition(int saveIndex, SaveFile saveFile){
         int[] position = new int[2];
 

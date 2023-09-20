@@ -426,7 +426,12 @@ public enum Specie {
     public int getBaseSpecialDefense() {
         return baseSpecialDefense;
     }
-    
+
+    /**
+     * Returns the Pokémon name in the specified language.
+     * @param language -> the language the wanted name is in
+     * @return -> the required specie name
+     */
     public String getName(Language language){
         String specieName;
         switch (language){

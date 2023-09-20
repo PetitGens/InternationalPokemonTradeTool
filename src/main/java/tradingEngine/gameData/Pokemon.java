@@ -343,10 +343,19 @@ public class Pokemon {
         return returnArray;
     }
 
+    /**
+     * Returns the Pokémon's language (Western or Japanese).
+     * @return -> the Pokémon's language
+     */
     public Language getLanguage(){
         return language;
     }
 
+    /**
+     * Change the Pokémon's language. This will get rid of its nickname and trainer name, because these can't be
+     * converted.
+     * @param language -> the new Pokémon language (gets set to Western if it's any of the Western languages)
+     */
     public void setLanguage(Language language){
         if(this.language.equals(language)){
             return;
@@ -365,7 +374,7 @@ public class Pokemon {
             trainerName.add(InGameJapaneseCharacter.KATAKANA_A.value);
         }
         else { // Western Language
-            language = Language.WESTERN;
+            this.language = Language.WESTERN;
             nickname = new WesternString();
             trainerName = new WesternString();
             nickname.add(InGameWesternCharacter.CAPITAL_A.value);
@@ -373,6 +382,12 @@ public class Pokemon {
         }
     }
 
+    /**
+     * Sets the Pokémon's nickname from a String.
+     * @param nickname -> the new Pokémon's nickname
+     * @throws IllegalArgumentException if the name's size is invalid or if it contains illegal characters
+     * @see InGameString
+     */
     public void setNickname(String nickname){
         int nicknameMaxLength = language == Language.JAPANESE ? 5 : 10;
         if(nickname.length() > nicknameMaxLength){
@@ -381,7 +396,12 @@ public class Pokemon {
 
         this.nickname.fromString(nickname);
     }
-
+    /**
+     * Sets the Pokémon's trainer name from a String.
+     * @param trainerName -> the new Pokémon's trainer name
+     * @throws IllegalArgumentException if the name's size is invalid or if it contains illegal characters
+     * @see InGameString
+     */
     public void setTrainerName(String trainerName){
         int trainerNameMaxLength = language == Language.JAPANESE ? 5 : 7;
         if(trainerName.length() > trainerNameMaxLength){
@@ -443,6 +463,10 @@ public class Pokemon {
         return result;
     }
 
+    /**
+     * Checks if the Pokémon has a nickname or its regular specie name.
+     * @return -> true if the Pokémon is nicknamed, false otherwise
+     */
     public boolean isNicknamed(){
         for (Language language : Language.values()){
             if(language == Language.WESTERN){

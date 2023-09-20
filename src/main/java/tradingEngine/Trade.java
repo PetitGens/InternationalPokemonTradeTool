@@ -3,20 +3,36 @@ package main.java.tradingEngine;
 import main.java.tradingEngine.gameData.Language;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.SaveFile;
+import main.java.tradingEngine.gameData.Specie;
 
 import java.io.IOException;
 
+/**
+ * The class whose role is to exchange the Pokémon between the two save files.
+ * If the two Pokémon need to be converted before the trade, this class will handle it.
+ * @author Julien Ait azzouzene
+ */
 public class Trade {
     SaveFile saveFile1 = null;
     SaveFile saveFile2 = null;
 
     public Trade(){}
 
+    /**
+     * A parameterized constructor for Trade. It permits to specify the two save files directly.
+     * @param saveFile1 -> the first save file involved in the trade
+     * @param saveFile2 -> the second save file involved in the trade
+     */
     public Trade(SaveFile saveFile1, SaveFile saveFile2){
         this.saveFile1 = saveFile1;
         this.saveFile2 = saveFile2;
     }
 
+    /**
+     * Sets one of the two save files.
+     * @param index -> the index of the save file that must be set (either 0 or 1 since there are two of them)
+     * @param saveFile -> the save file to store
+     */
     public void setSaveFile(int index, SaveFile saveFile){
         switch (index) {
             case 0 -> saveFile1 = saveFile;
@@ -25,6 +41,13 @@ public class Trade {
         }
     }
 
+    /**
+     * Open a save file and keep to trade with it later.
+     * @param index -> the index of the save file that must be set (either 0 or 1 since there are two of them)
+     * @param path -> the path of the save file
+     * @throws IllegalArgumentException -> if the index is invalid
+     * @throws IOException -> if the save file opening fails
+     */
     public void openSaveFile(int index, String path) throws IOException {
         switch (index) {
             case 0 -> saveFile1 = new SaveFile(path);
@@ -33,6 +56,11 @@ public class Trade {
         }
     }
 
+    /**
+     * Returns one of the two save files.
+     * @param index -> the index of the save file that must be returned (either 0 or 1 since there are two of them)
+     * @return -> the required save file
+     */
     public SaveFile getSaveFile(int index){
         return switch (index) {
             case 0 -> saveFile1;
@@ -41,6 +69,18 @@ public class Trade {
         };
     }
 
+    /**
+     * Trades the specified Pokémon between the two save files.
+     * @param pokemon1InParty -> true if the Pokémon of the first save file is in the party, false if it's in a box
+     * @param pokemonIndex1 -> the first Pokémon's index in the party / in its box
+     * @param boxIndex1 -> the first Pokémon's box number (only important if in a box)
+     * @param pokemon2InParty -> true if the Pokémon of the second save file is in the party, false if it's in a box
+     * @param pokemonIndex2 -> the second Pokémon's index in the party / in its box
+     * @param boxIndex2 -> the second Pokémon's box number (only important if in a box)
+     * @throws IllegalArgumentException -> if one of the indexes is invalid or if one of the two locations contains a
+     * Blank Space (i.e. no Pokémon)
+     * @throws IOException -> if the file writing fails
+     */
     public void trade(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                       boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
 
@@ -67,6 +107,18 @@ public class Trade {
         }
     }
 
+    /**
+     * Trades the two Pokémon without any conversion
+     * @param pokemon1InParty -> true if the Pokémon of the first save file is in the party, false if it's in a box
+     * @param pokemonIndex1 -> the first Pokémon's index in the party / in its box
+     * @param boxIndex1 -> the first Pokémon's box number (only important if in a box)
+     * @param pokemon2InParty -> true if the Pokémon of the second save file is in the party, false if it's in a box
+     * @param pokemonIndex2 -> the second Pokémon's index in the party / in its box
+     * @param boxIndex2 -> the second Pokémon's box number (only important if in a box)
+     * @throws IllegalArgumentException -> if one of the indexes is invalid or if one of the two locations contains a
+     * Blank Space (i.e. no Pokémon)
+     * @throws IOException -> if the file writing fails
+     */
     private void noConversionTrade(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                               boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
         Pokemon[] tradedPokemon = getTradedPokemon(pokemon1InParty, pokemonIndex1, boxIndex1,
@@ -76,6 +128,18 @@ public class Trade {
                 pokemon2InParty, pokemonIndex2, boxIndex2);
     }
 
+    /**
+     * Get the two Pokémon from the save files and return them.
+     * @param pokemon1InParty -> true if the Pokémon of the first save file is in the party, false if it's in a box
+     * @param pokemonIndex1 -> the first Pokémon's index in the party / in its box
+     * @param boxIndex1 -> the first Pokémon's box number (only important if in a box)
+     * @param pokemon2InParty -> true if the Pokémon of the second save file is in the party, false if it's in a box
+     * @param pokemonIndex2 -> the second Pokémon's index in the party / in its box
+     * @param boxIndex2 -> the second Pokémon's box number (only important if in a box)
+     * @throws IllegalArgumentException -> if one of the indexes is invalid or if one of the two locations contains a
+     * Blank Space (i.e. no Pokémon)
+     * @return an array containing the two Pokémon
+     */
     private Pokemon[] getTradedPokemon(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                                        boolean pokemon2InParty, int pokemonIndex2, int boxIndex2){
         Pokemon[] pokemon = new Pokemon[2];
@@ -86,9 +150,27 @@ public class Trade {
                     saveFile2.getPartyPokemon(pokemonIndex2):
                     saveFile2.getBoxPokemon(boxIndex2, pokemonIndex2);
 
+        if(pokemon[0].getSpecie() == Specie.BLANK_SPACE || pokemon[1].getSpecie() == Specie.BLANK_SPACE){
+            throw new IllegalArgumentException("there is no Pokémon at this position");
+        }
+
         return pokemon;
     }
 
+
+    /**
+     * Store the two Pokémon in their respective new save files.
+     * @param pokemon -> an array containing the two Pokémon
+     * @param pokemon1InParty -> true if the Pokémon of the first save file is in the party, false if it's in a box
+     * @param pokemonIndex1 -> the first Pokémon's index in the party / in its box
+     * @param boxIndex1 -> the first Pokémon's box number (only important if in a box)
+     * @param pokemon2InParty -> true if the Pokémon of the second save file is in the party, false if it's in a box
+     * @param pokemonIndex2 -> the second Pokémon's index in the party / in its box
+     * @param boxIndex2 -> the second Pokémon's box number (only important if in a box)
+     * @throws IllegalArgumentException -> if one of the indexes is invalid or if one of the two locations contains a
+     * Blank Space (i.e. no Pokémon)
+     * @throws IOException -> if the file writing fails
+     */
     private void storeTradedPokemon(Pokemon[] pokemon, boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                                     boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
         if(pokemon1InParty){
@@ -106,6 +188,18 @@ public class Trade {
         }
     }
 
+    /**
+     * Trades two Pokémon whose languages need to be converted.
+     * @param pokemon1InParty -> true if the Pokémon of the first save file is in the party, false if it's in a box
+     * @param pokemonIndex1 -> the first Pokémon's index in the party / in its box
+     * @param boxIndex1 -> the first Pokémon's box number (only important if in a box)
+     * @param pokemon2InParty -> true if the Pokémon of the second save file is in the party, false if it's in a box
+     * @param pokemonIndex2 -> the second Pokémon's index in the party / in its box
+     * @param boxIndex2 -> the second Pokémon's box number (only important if in a box)
+     * @throws IllegalArgumentException -> if one of the indexes is invalid or if one of the two locations contains a
+     * Blank Space (i.e. no Pokémon)
+     * @throws IOException -> if the file writing fails
+     */
     private void conversionTrade(boolean pokemon1InParty, int pokemonIndex1, int boxIndex1,
                                  boolean pokemon2InParty, int pokemonIndex2, int boxIndex2) throws IOException {
         Pokemon[] tradedPokemon = getTradedPokemon(pokemon1InParty, pokemonIndex1, boxIndex1,
@@ -118,6 +212,11 @@ public class Trade {
                 pokemon2InParty, pokemonIndex2, boxIndex2);
     }
 
+    /**
+     * Convert a Pokémon's language so that it can be traded.
+     * @param pokemon -> the Pokémon whose language needs to be converted
+     * @param newLanguage -> the language to set the Pokémon's language to.
+     */
     private void convertPokemonLanguage(Pokemon pokemon, Language newLanguage){
         //TODO ask the user a nickname if the Pokemon is nicknamed
         //TODO ask the user a new trainer Name

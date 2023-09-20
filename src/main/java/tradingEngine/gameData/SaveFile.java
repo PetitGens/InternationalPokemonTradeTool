@@ -192,8 +192,17 @@ public class SaveFile {
         return trainerName;
     }
 
+    /**
+     * Returns the save file's language.
+     * @return -> the save file's language
+     */
     public Language getLanguage(){return language;}
 
+    /**
+     * Sets the save file's language. This should only be used with a Western save file, since it's the only case where
+     * the language cannot be detected.
+     * @param language -> the save file's language
+     */
     public void setLanguage(Language language){
         if(this.language == Language.JAPANESE){
             throw new IllegalArgumentException("you cannot change language if the save file is Japanese");

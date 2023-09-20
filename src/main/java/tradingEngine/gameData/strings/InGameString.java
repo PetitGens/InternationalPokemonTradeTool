@@ -119,9 +119,9 @@ public abstract class InGameString {
     public abstract String toString();
 
     /**
-     * (currently unimplemented) Replaces all the string's characters from the regular Java String given as parameter
+     * Replaces all the string's characters from the regular Java String given as parameter
      * @param string -> the String to read from
-     * @throws IllegalArgumentException if the given string contains characters, that aren't in the game
+     * @throws IllegalArgumentException if the given string contains characters that aren't in the game
      */
     public abstract void fromString(String string);
 

@@ -60,9 +60,12 @@ public class WesternString extends InGameString{
         if(string.length() > InGameString.MAX_SIZE - 1){
             throw new IllegalArgumentException("string too long");
         }
+        if(string.length() == 0){
+            throw new IllegalArgumentException("string must not be empty");
+        }
         char[] charArray = string.toCharArray();
 
-        int i = 0;
+        int i;
         for( i = 0; i < string.length(); i++){
             InGameWesternCharacter inGameCharacter = InGameWesternCharacter.fromRegularCharacter(charArray[i]);
             if (inGameCharacter == null){

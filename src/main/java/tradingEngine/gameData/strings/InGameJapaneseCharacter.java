@@ -187,6 +187,11 @@ public enum InGameJapaneseCharacter {
         return null;
     }
 
+    /**
+     * Returns one of the enumeration's elements corresponding to the specified regular character.
+     * @param character -> the regular character
+     * @return -> the corresponding in-game character
+     */
     public static InGameJapaneseCharacter fromRegularCharacter(char character){
         for(InGameJapaneseCharacter inGameCharacter : values()){
             if(inGameCharacter.character == character){
