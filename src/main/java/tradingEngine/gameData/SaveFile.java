@@ -7,6 +7,7 @@ import main.java.tradingEngine.gameData.strings.WesternString;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This class is used to read and write data from a Pokémon Red, Green, Blue, Yellow, Gold, Silver or Crystal save file.
@@ -42,7 +43,7 @@ public class SaveFile {
      */
     public SaveFile(String path) throws IOException {
         this.path = path;
-        byte[] saveData = Files.readAllBytes(Path.of(path));
+        byte[] saveData = Files.readAllBytes(Paths.get(path));
 
         if(saveData.length != 0x8000 && saveData.length != 0x802C){
             throw new IOException("invalid size");
@@ -233,7 +234,7 @@ public class SaveFile {
             throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
         }
 
-        Path file = Path.of(path);
+        Path file = Paths.get(path);
 
         byte[] saveData = Files.readAllBytes(file);
         writePartyPokemon(saveData, index, pokemon);
@@ -263,7 +264,7 @@ public class SaveFile {
             throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
         }
 
-        Path file = Path.of(path);
+        Path file = Paths.get(path);
         byte[] saveData = Files.readAllBytes(file);
 
         if(boxNumber == currentBox){
@@ -577,7 +578,7 @@ public class SaveFile {
     }
 
     /**
-     * Returns if the save file is from a western game (i.e., english, french, german, spanish or italian).
+     * Returns if the save file is from a western game (i.e., english, French, german, spanish or italian).
      * @param saveData -> the save file's raw data
      * @return -> true if the save file is western, false otherwise
      */

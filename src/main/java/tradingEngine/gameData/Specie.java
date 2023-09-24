@@ -303,12 +303,24 @@ public enum Specie {
      */
     private void setEnglishName(){
         switch (name()) {
-            case "NIDORAN_F" -> englishName = "NIDORAN♀";
-            case "NIDORAN_M" -> englishName = "NIDORAN♂";
-            case "FARFETCH_D" -> englishName = "FARFETCH'D";
-            case "MR_MIME" -> englishName = "MR. MIME";
-            case "HO_OH" -> englishName = "HO-OH";
-            default -> englishName = name();
+            case "NIDORAN_F":
+                englishName = "NIDORAN♀";
+                break;
+            case "NIDORAN_M":
+                englishName = "NIDORAN♂";
+                break;
+            case "FARFETCH_D":
+                englishName = "FARFETCH'D";
+                break;
+            case "MR_MIME":
+                englishName = "MR. MIME";
+                break;
+            case "HO_OH":
+                englishName = "HO-OH";
+                break;
+            default:
+                englishName = name();
+                break;
         }
     }
 
@@ -434,12 +446,22 @@ public enum Specie {
      */
     public String getName(Language language){
         String specieName;
-        switch (language){
-            case JAPANESE -> specieName = japaneseName;
-            case FRENCH -> specieName = frenchName;
-            case GERMAN -> specieName = germanName;
-            case KOREAN -> specieName = koreanName;
-            default -> specieName = englishName;
+        switch (language) {
+            case JAPANESE:
+                specieName = japaneseName;
+                break;
+            case FRENCH:
+                specieName = frenchName;
+                break;
+            case GERMAN:
+                specieName = germanName;
+                break;
+            case KOREAN:
+                specieName = koreanName;
+                break;
+            default:
+                specieName = englishName;
+                break;
         }
         return specieName;
     }

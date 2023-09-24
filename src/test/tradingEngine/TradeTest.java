@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import static org.junit.Assert.*;
@@ -20,10 +21,10 @@ public class TradeTest {
 
     @Test
     public void tradeTest() throws IOException {
-        Path baseSavePath = Path.of(resourcesPath + "save.sav");
-        Files.copy(baseSavePath, Path.of(resourcesPath + "copy.sav"),
+        Path baseSavePath = Paths.get(resourcesPath + "save.sav");
+        Files.copy(baseSavePath, Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(baseSavePath, Path.of(resourcesPath + "copy2.sav"),
+        Files.copy(baseSavePath, Paths.get(resourcesPath + "copy2.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         Trade trade = new Trade();
@@ -46,10 +47,10 @@ public class TradeTest {
 
     @Test
     public void internationalTradeTest() throws IOException {
-        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+        Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        Files.copy(Path.of(resourcesPath + "jap.sav"), Path.of(resourcesPath + "copy_jap.sav"),
+        Files.copy(Paths.get(resourcesPath + "jap.sav"), Paths.get(resourcesPath + "copy_jap.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         Trade trade = new Trade();

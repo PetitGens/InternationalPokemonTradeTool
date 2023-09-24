@@ -35,9 +35,14 @@ public class Trade {
      */
     public void setSaveFile(int index, SaveFile saveFile){
         switch (index) {
-            case 0 -> saveFile1 = saveFile;
-            case 1 -> saveFile2 = saveFile;
-            default -> throw new IllegalArgumentException("invalid save index");
+            case 0:
+                saveFile1 = saveFile;
+                break;
+            case 1:
+                saveFile2 = saveFile;
+                break;
+            default:
+                throw new IllegalArgumentException("invalid save index");
         }
     }
 
@@ -50,9 +55,14 @@ public class Trade {
      */
     public void openSaveFile(int index, String path) throws IOException {
         switch (index) {
-            case 0 -> saveFile1 = new SaveFile(path);
-            case 1 -> saveFile2 = new SaveFile(path);
-            default -> throw new IllegalArgumentException("invalid save index");
+            case 0:
+                saveFile1 = new SaveFile(path);
+                break;
+            case 1:
+                saveFile2 = new SaveFile(path);
+                break;
+            default:
+                throw new IllegalArgumentException("invalid save index");
         }
     }
 
@@ -62,11 +72,14 @@ public class Trade {
      * @return -> the required save file
      */
     public SaveFile getSaveFile(int index){
-        return switch (index) {
-            case 0 -> saveFile1;
-            case 1 -> saveFile2;
-            default -> throw new IllegalArgumentException("invalid save index");
-        };
+        switch (index) {
+            case 0:
+                return  saveFile1;
+            case 1:
+                return saveFile2;
+            default:
+                throw new IllegalArgumentException("invalid save index");
+        }
     }
 
     /**
