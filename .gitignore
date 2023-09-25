@@ -31,3 +31,6 @@ out
 # Eclipse
 .project
 .classpath
+
+# Backup save files
+backups

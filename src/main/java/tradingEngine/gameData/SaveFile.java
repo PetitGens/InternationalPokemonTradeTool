@@ -35,6 +35,8 @@ public class SaveFile {
     private final InGameString trainerName;
     private Language language;
 
+    public int checksum;
+
     /**
      * Reads the save file located at the given path.
      * @param path -> the save file path
@@ -280,6 +282,14 @@ public class SaveFile {
         boxes[boxNumber][pokemonIndex] = pokemon;
     }
 
+    public void backup() throws IOException{
+        SaveBackups.backup(this);
+    }
+
+    public int getChecksum(){
+        return checksum;
+    }
+
     /**
      * Compute the save file's checksum and returns it.
      * @param data -> the save file's raw data
@@ -305,7 +315,8 @@ public class SaveFile {
      */
     private boolean verifyChecksum(byte[] data){
         int checksumOffset = language == Language.JAPANESE ? 0x3594 : 0x3523;
-        return calculateChecksum(data) == Bytes.byteToUnsignedByte(data[checksumOffset]);
+        checksum = Bytes.byteToUnsignedByte(data[checksumOffset]);
+        return calculateChecksum(data) == checksum;
     }
 
     /**
@@ -313,7 +324,7 @@ public class SaveFile {
      * @param data -> the save file's raw data
      */
     private void fixChecksum(byte[] data){
-        int checksum = calculateChecksum(data);
+        checksum = calculateChecksum(data);
         int checksumOffset = language == Language.JAPANESE ? 0x3594 : 0x3523;
 
         data[checksumOffset] = (byte) checksum;

@@ -1,6 +1,7 @@
 package main.java.tradingEngine;
 
 import main.java.tradingEngine.gameData.Pokemon;
+import main.java.tradingEngine.gameData.SaveBackups;
 import main.java.tradingEngine.gameData.SaveFile;
 import main.java.tradingEngine.gameData.Specie;
 
@@ -22,6 +23,8 @@ public class CLIApp {
      */
     public static void main(String[] args){
         scanner = new Scanner(System.in);
+
+        SaveBackups.deleteOldBackups();
 
         SaveFile saveFile1 = saveFilePathInput(1);
         SaveFile saveFile2 = saveFilePathInput(2);

@@ -23,9 +23,20 @@ public class Trade {
      * @param saveFile1 -> the first save file involved in the trade
      * @param saveFile2 -> the second save file involved in the trade
      */
-    public Trade(SaveFile saveFile1, SaveFile saveFile2){
+    public Trade(SaveFile saveFile1, SaveFile saveFile2) {
         this.saveFile1 = saveFile1;
         this.saveFile2 = saveFile2;
+        try{
+            saveFile1.backup();
+            saveFile2.backup();
+        }
+        catch (IOException ioException){
+            System.out.println("For some reasons, the automatic backup failed.");
+            System.out.println("You can still proceed to the trade, but it is recommended to solve the problem first.");
+            System.out.println("\nReason : ");
+            System.out.println(ioException.getMessage());
+        }
+
     }
 
     /**
@@ -33,13 +44,15 @@ public class Trade {
      * @param index -> the index of the save file that must be set (either 0 or 1 since there are two of them)
      * @param saveFile -> the save file to store
      */
-    public void setSaveFile(int index, SaveFile saveFile){
+    public void setSaveFile(int index, SaveFile saveFile) throws IOException {
         switch (index) {
             case 0:
                 saveFile1 = saveFile;
+                saveFile1.backup();
                 break;
             case 1:
                 saveFile2 = saveFile;
+                saveFile1.backup();
                 break;
             default:
                 throw new IllegalArgumentException("invalid save index");
@@ -57,9 +70,11 @@ public class Trade {
         switch (index) {
             case 0:
                 saveFile1 = new SaveFile(path);
+                saveFile1.backup();
                 break;
             case 1:
                 saveFile2 = new SaveFile(path);
+                saveFile2.backup();
                 break;
             default:
                 throw new IllegalArgumentException("invalid save index");
