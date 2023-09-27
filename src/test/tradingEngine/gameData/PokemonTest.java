@@ -1,21 +1,23 @@
 package test.tradingEngine.gameData;
 
+import main.java.tradingEngine.gameData.Language;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.Specie;
 import main.java.tradingEngine.gameData.strings.InGameWesternCharacter;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-class PokemonTest {
+public class PokemonTest {
 
     @Test
-    void inPartyConstructorTest(){
+    public void inPartyConstructorTest(){
         byte[] data = partyPokemonData();
 
         byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
 
-        Pokemon partyPokemon = new Pokemon(data, nickname, nickname, false);
+        Pokemon partyPokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
 
         assertEquals(0x9A, partyPokemon.getIndexNumber());
         assertEquals(Specie.VENUSAUR, partyPokemon.getSpecie());
@@ -56,12 +58,12 @@ class PokemonTest {
     }
 
     @Test
-    void inBoxConstructorTest(){
+    public void inBoxConstructorTest(){
         byte[] data = boxPokemonData();
 
         byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
 
-        Pokemon boxPokemon = new Pokemon(data, nickname, nickname, false);
+        Pokemon boxPokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
 
         assertEquals(0x84, boxPokemon.getIndexNumber());
         assertEquals(Specie.SNORLAX, boxPokemon.getSpecie());
@@ -96,9 +98,9 @@ class PokemonTest {
     }
 
     @Test
-    void toPartyDataTest(){
+    public void toPartyDataTest(){
         byte[] boxData = boxPokemonData();
-        Pokemon snorlax = new Pokemon(boxData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, false);
+        Pokemon snorlax = new Pokemon(boxData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, Language.WESTERN);
         byte[] expectedData = new byte[44];
         System.arraycopy(boxData, 0, expectedData, 0, 33);
 
@@ -115,14 +117,41 @@ class PokemonTest {
     }
 
     @Test
-    void toBoxDataTest(){
+    public void toBoxDataTest(){
         byte[] partyData = partyPokemonData();
-        Pokemon venasaur = new Pokemon(partyData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_H.value}, false);
+        Pokemon venusaur = new Pokemon(partyData, new byte[]{InGameWesternCharacter.CAPITAL_A.value}, new byte[]{InGameWesternCharacter.CAPITAL_H.value}, Language.WESTERN);
         byte[] expectedData = new byte[33];
         System.arraycopy(partyData, 0, expectedData, 0, 33);
 
         expectedData[3] = 32;
-        assertArrayEquals(expectedData, venasaur.toBoxRawData());
+        assertArrayEquals(expectedData, venusaur.toBoxRawData());
+    }
+
+    @Test
+    public void setWesternNamesTest(){
+        byte[] data = partyPokemonData();
+        byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+        Pokemon pokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
+
+        pokemon.setNickname("FLORIZARRE");
+        pokemon.setTrainerName("PtJean");
+
+        assertEquals("FLORIZARRE", pokemon.getNickname().toString());
+        assertEquals("PtJean", pokemon.getTrainerName().toString());
+    }
+
+    @Test
+    public void setJapaneseNamesTest(){
+        byte[] data = partyPokemonData();
+        byte[] nickname = {InGameWesternCharacter.CAPITAL_A.value};
+        Pokemon pokemon = new Pokemon(data, nickname, nickname, Language.WESTERN);
+        pokemon.setLanguage(Language.JAPANESE);
+
+        pokemon.setNickname("フシギバナ");
+        pokemon.setTrainerName("ばか");
+
+        assertEquals("フシギバナ", pokemon.getNickname().toString());
+        assertEquals("ばか", pokemon.getTrainerName().toString());
     }
 
     public static byte[] partyPokemonData(){

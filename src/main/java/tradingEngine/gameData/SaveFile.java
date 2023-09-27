@@ -7,6 +7,7 @@ import main.java.tradingEngine.gameData.strings.WesternString;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This class is used to read and write data from a Pokémon Red, Green, Blue, Yellow, Gold, Silver or Crystal save file.
@@ -15,8 +16,6 @@ import java.nio.file.Path;
  */
 public class SaveFile {
     private String path;
-
-    private final boolean japanese;
 
     private final Pokemon[] party = new Pokemon[6];
 
@@ -34,26 +33,29 @@ public class SaveFile {
 
     private final int trainerId;
     private final InGameString trainerName;
+    private Language language;
+
+    public int checksum;
 
     /**
      * Reads the save file located at the given path.
-     * @param path -> the save file path
-     * @throws IOException -> if the file opening fails or if the save file has some problem
+     * @param path the save file path
+     * @throws IOException if the file opening fails or if the save file has some problem
      * (for instance, bad checksums, illegal data, ...)
      */
     public SaveFile(String path) throws IOException {
         this.path = path;
-        byte[] saveData = Files.readAllBytes(Path.of(path));
+        byte[] saveData = Files.readAllBytes(Paths.get(path));
 
         if(saveData.length != 0x8000 && saveData.length != 0x802C){
             throw new IOException("invalid size");
         }
 
         if(isWestern(saveData)){
-            japanese = false;
+            language = Language.WESTERN;
         }
         else if(isJapanese(saveData)){
-            japanese = true;
+            language = Language.JAPANESE;
         }
         else{
             throw new IOException("invalid save file");
@@ -67,7 +69,7 @@ public class SaveFile {
         int currentBoxNumberOffset;
         int currentBoxOffset;
 
-        if(japanese){
+        if(language == Language.JAPANESE){
             partyOffset = 0x2ED5;
             currentBoxNumberOffset = 0x2842;
             currentBoxOffset = 0x302D;
@@ -109,21 +111,21 @@ public class SaveFile {
 
         // Reading trainer's name and ID number
 
-        int idOffset = japanese? 0x25FB : 0x2605;
+        int idOffset = language == Language.JAPANESE ? 0x25FB : 0x2605;
         trainerId = Bytes.twoBytesToInt(saveData[idOffset], saveData[idOffset + 1]);
 
         int trainerNameOffset = 0x2598;
         byte[] rawName = new byte[nameLength];
         System.arraycopy(saveData, trainerNameOffset, rawName, 0, nameLength);
-        trainerName = japanese ? new JapaneseString() : new WesternString();
+        trainerName = language == Language.JAPANESE ? new JapaneseString() : new WesternString();
         trainerName.addAll(rawName);
     }
 
     /**
      * Returns one the Pokémon in the party at the given index (0 gives the 1st Pokémon, 5 gives the 6th).
-     * @param index -> the index of the wanted party Pokémon
+     * @param index the index of the wanted party Pokémon
      * @return the Pokémon at this index in the party
-     * @throws IllegalArgumentException -> if the index is negative or above 5
+     * @throws IllegalArgumentException if the index is negative or above 5
      */
     public Pokemon getPartyPokemon(int index) {
         if(index >= 6 || index < 0){
@@ -135,7 +137,7 @@ public class SaveFile {
 
     /**
      * Returns the number of Pokémon in the party.
-     * @return -> the party length
+     * @return the party length
      */
     public int getPartyLength(){
         return partyLength;
@@ -143,10 +145,10 @@ public class SaveFile {
 
     /**
      * Returns a Pokémon in the specified box and at the specified index.
-     * @param boxNumber -> the number of the box the Pokémon is (starts at 0).
-     * @param pokemonIndex -> the index of the Pokémon in the box
-     * @return -> the wanted Pokémon
-     * @throws IllegalArgumentException -> if the boxNumber or pokemonIndex is negative or too big for the game / region
+     * @param boxNumber the number of the box the Pokémon is (starts at 0).
+     * @param pokemonIndex the index of the Pokémon in the box
+     * @return the wanted Pokémon
+     * @throws IllegalArgumentException if the boxNumber or pokemonIndex is negative or too big for the game / region
      */
     public Pokemon getBoxPokemon(int boxNumber, int pokemonIndex){
         if(boxNumber >= boxCount || boxNumber < 0){
@@ -161,7 +163,7 @@ public class SaveFile {
 
     /**
      * Returns the path where the save file is located.
-     * @return -> the path
+     * @return the path
      */
     public String getPath(){
         return path;
@@ -171,7 +173,7 @@ public class SaveFile {
      * Sets the path where the data must be written.
      * This save file will not load data at that location, but will overwrite the potential file every time a new
      * Pokémon is stored.
-     * @param path -> the new file path
+     * @param path the new file path
      */
     public void setPath(String path){
         this.path = path;
@@ -179,7 +181,7 @@ public class SaveFile {
 
     /**
      * Returns the trainer ID of the save file.
-     * @return -> the trainer ID
+     * @return the trainer ID
      */
     public int getTrainerId(){
         return trainerId;
@@ -187,18 +189,42 @@ public class SaveFile {
 
     /**
      * Returns the trainer name of the save file.
-     * @return -> the trainer name
+     * @return the trainer name
      */
     public InGameString getTrainerName(){
         return trainerName;
     }
 
     /**
+     * Returns the save file's language.
+     * @return the save file's language
+     */
+    public Language getLanguage(){return language;}
+
+    /**
+     * Sets the save file's language. This should only be used with a Western save file, since it's the only case where
+     * the language cannot be detected.
+     * @param language the save file's language
+     */
+    public void setLanguage(Language language){
+        if(this.language == Language.JAPANESE){
+            throw new IllegalArgumentException("you cannot change language if the save file is Japanese");
+        }
+
+        if(language == Language.JAPANESE || language == Language.KOREAN){
+            throw new IllegalArgumentException("illegal language for a Western game");
+        }
+
+        this.language = language;
+    }
+
+
+    /**
      * Replace a Pokémon in the save file's party with the one given as parameter. Updates both the object and the file.
-     * @param index -> the index in the party where the Pokémon should be placed (starts at 0).
-     * @param pokemon -> the Pokémon to store
-     * @throws IOException -> if the file writing fails
-     * @throws IllegalArgumentException -> if the index is illegal, or if there is no Pokémon at that index or if the
+     * @param index the index in the party where the Pokémon should be placed (starts at 0).
+     * @param pokemon the Pokémon to store
+     * @throws IOException if the file writing fails
+     * @throws IllegalArgumentException if the index is illegal, or if there is no Pokémon at that index or if the
      * Pokémon is not in the same format as the save file (it must be converted beforehand)
      */
     public void storePokemonInParty(int index, Pokemon pokemon) throws IOException {
@@ -206,11 +232,11 @@ public class SaveFile {
             throw new IllegalArgumentException("there is no Pokémon at that index");
         }
 
-        if(pokemon.isJapanese() != japanese){
+        if((pokemon.getLanguage() == Language.JAPANESE) != (language == Language.JAPANESE)){
             throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
         }
 
-        Path file = Path.of(path);
+        Path file = Paths.get(path);
 
         byte[] saveData = Files.readAllBytes(file);
         writePartyPokemon(saveData, index, pokemon);
@@ -224,11 +250,11 @@ public class SaveFile {
     /**
      * Replace a Pokémon in one of the save file's boxes with the one given as parameter. Updates both the object and
      * the file.
-     * @param boxNumber -> the box where the Pokémon should be placed (starts at 0)
-     * @param pokemonIndex -> the index in the box where the Pokémon should be placed (starts at 0)
-     * @param pokemon -> the Pokémon to store
-     * @throws IOException -> if the file writing fails
-     * @throws IllegalArgumentException -> if the index is illegal, or if there is no Pokémon at that location or if the
+     * @param boxNumber the box where the Pokémon should be placed (starts at 0)
+     * @param pokemonIndex the index in the box where the Pokémon should be placed (starts at 0)
+     * @param pokemon the Pokémon to store
+     * @throws IOException if the file writing fails
+     * @throws IllegalArgumentException if the index is illegal, or if there is no Pokémon at that location or if the
      * Pokémon is not in the same format as the save file (it must be converted beforehand)
      */
     public void storePokemonInBox(int boxNumber, int pokemonIndex, Pokemon pokemon) throws IOException {
@@ -236,11 +262,11 @@ public class SaveFile {
             throw new IllegalArgumentException("there is no Pokémon at that index");
         }
 
-        if(pokemon.isJapanese() != japanese){
+        if((pokemon.getLanguage() == Language.JAPANESE)!= (language == Language.JAPANESE)){
             throw new IllegalArgumentException("this Pokémon's language is not compatible with this Save File's");
         }
 
-        Path file = Path.of(path);
+        Path file = Paths.get(path);
         byte[] saveData = Files.readAllBytes(file);
 
         if(boxNumber == currentBox){
@@ -257,12 +283,29 @@ public class SaveFile {
     }
 
     /**
+     * Copy the save file into the "backups" folder.
+     * @throws IOException if the backup fail for some reason
+     * @see SaveBackups#backup(SaveFile)
+     */
+    public void backup() throws IOException{
+        SaveBackups.backup(this);
+    }
+
+    /**
+     * Returns the save file's checksum.
+     * @return the checksum
+     */
+    public int getChecksum(){
+        return checksum;
+    }
+
+    /**
      * Compute the save file's checksum and returns it.
-     * @param data -> the save file's raw data
-     * @return -> the checksum
+     * @param data the save file's raw data
+     * @return the checksum
      */
     private int calculateChecksum(byte[] data){
-        int checksumOffset = japanese ? 0x3594 : 0x3523;
+        int checksumOffset = language == Language.JAPANESE ? 0x3594 : 0x3523;
         int checksum = 0;
 
         for(int i = 0x2598; i <= checksumOffset - 1; i++){
@@ -276,30 +319,31 @@ public class SaveFile {
 
     /**
      * Verify if the checksum is correct (if the stored checksum matches the computed one)
-     * @param data -> the save file's raw data
-     * @return -> true if the checksum is correct, false otherwise
+     * @param data the save file's raw data
+     * @return true if the checksum is correct, false otherwise
      */
     private boolean verifyChecksum(byte[] data){
-        int checksumOffset = japanese ? 0x3594 : 0x3523;
-        return calculateChecksum(data) == Bytes.byteToUnsignedByte(data[checksumOffset]);
+        int checksumOffset = language == Language.JAPANESE ? 0x3594 : 0x3523;
+        checksum = Bytes.byteToUnsignedByte(data[checksumOffset]);
+        return calculateChecksum(data) == checksum;
     }
 
     /**
      * Computes the checksum and store it at the right location in the save file.
-     * @param data -> the save file's raw data
+     * @param data the save file's raw data
      */
     private void fixChecksum(byte[] data){
-        int checksum = calculateChecksum(data);
-        int checksumOffset = japanese ? 0x3594 : 0x3523;
+        checksum = calculateChecksum(data);
+        int checksumOffset = language == Language.JAPANESE ? 0x3594 : 0x3523;
 
         data[checksumOffset] = (byte) checksum;
     }
 
     /**
      * Reads every Pokémon in the save file's party
-     * @param saveData -> the save file's raw data
-     * @param partyOffset -> the offset of the party in the save file
-     * @throws IOException -> if any data is detected illegal (such as Pokémon count and characters)
+     * @param saveData the save file's raw data
+     * @param partyOffset the offset of the party in the save file
+     * @throws IOException if any data is detected illegal (such as Pokémon count and characters)
      */
     private void readPartyPokemon(byte[] saveData, int partyOffset) throws IOException {
         Specie[] partySpeciesList = new Specie[partyLength];
@@ -325,7 +369,7 @@ public class SaveFile {
             System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
             try{
-                party[i] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                party[i] = new Pokemon(pokemonData, trainerName, nickname, language);
             }
             catch(IllegalArgumentException e){
                 throw new IOException("illegal name : " + e.getMessage());
@@ -343,12 +387,12 @@ public class SaveFile {
 
     /**
      * Write a Pokémon's data in the party.
-     * @param saveData -> the save file's raw data
-     * @param index -> the index where the Pokémon must be placed (starts at 0)
-     * @param pokemon -> the Pokémon to write
+     * @param saveData the save file's raw data
+     * @param index the index where the Pokémon must be placed (starts at 0)
+     * @param pokemon the Pokémon to write
      */
     private void writePartyPokemon(byte[] saveData, int index, Pokemon pokemon){
-        int partyOffset = japanese ? 0x2ED5 : 0x2F2C;
+        int partyOffset = language == Language.JAPANESE ? 0x2ED5 : 0x2F2C;
 
         saveData[partyOffset + index + 1] = (byte) pokemon.getIndexNumber();
 
@@ -366,14 +410,14 @@ public class SaveFile {
     }
     /**
      * Reads every Pokémon in the save file current box (the lately opened one in the game).
-     * @param saveData -> the save file's raw data
-     * @param boxOffset -> the offset of the current box in the save file
-     * @throws IOException -> if any data is detected illegal (such as Pokémon count and characters)
+     * @param saveData the save file's raw data
+     * @param boxOffset the offset of the current box in the save file
+     * @throws IOException if any data is detected illegal (such as Pokémon count and characters)
      */
     private void readCurrentBoxPokemon(byte[] saveData, int boxOffset) throws IOException {
         int pokemonCount = Bytes.byteToUnsignedByte(saveData[boxOffset]);
         
-        int firstPokemonOffset = japanese ? boxOffset + 0x20 : boxOffset + 0x16;
+        int firstPokemonOffset = language == Language.JAPANESE ? boxOffset + 0x20 : boxOffset + 0x16;
 
         for(int pokemonIndex = 0; pokemonIndex < pokemonCount; pokemonIndex++) {
             int pokemonOffset = firstPokemonOffset + pokemonIndex * 33;
@@ -391,7 +435,7 @@ public class SaveFile {
             System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
             try {
-                boxes[currentBox][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                boxes[currentBox][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
             } catch (IllegalArgumentException e) {
                 throw new IOException("illegal name : " + e.getMessage());
             }
@@ -404,15 +448,15 @@ public class SaveFile {
 
     /**
      * Write a Pokémon's data in the current box.
-     * @param saveData -> the save file's raw data
-     * @param index -> the index where the Pokémon must be placed (starts at 0)
-     * @param pokemon -> the Pokémon to write
+     * @param saveData the save file's raw data
+     * @param index the index where the Pokémon must be placed (starts at 0)
+     * @param pokemon the Pokémon to write
      */
     private void writeCurrentBoxPokemon(byte[] saveData, int index, Pokemon pokemon){
-        int currentBoxOffset = japanese ? 0x302D : 0x30C0;
+        int currentBoxOffset = language == Language.JAPANESE ? 0x302D : 0x30C0;
         saveData[currentBoxOffset + index + 1] = (byte) pokemon.getIndexNumber();
 
-        int firstPokemonOffset = japanese ? currentBoxOffset + 0x20 : currentBoxOffset + 0x16;
+        int firstPokemonOffset = language == Language.JAPANESE ? currentBoxOffset + 0x20 : currentBoxOffset + 0x16;
 
         int pokemonOffset = firstPokemonOffset + index * 33;
         byte[] pokemonData = pokemon.toBoxRawData();
@@ -429,15 +473,15 @@ public class SaveFile {
 
     /**
      * Reads every Pokémon in the save file's boxes.
-     * @param saveData -> the save file's raw data
-     * @throws IOException -> if any data is detected illegal (such as Pokémon count and characters)
+     * @param saveData the save file's raw data
+     * @throws IOException if any data is detected illegal (such as Pokémon count and characters)
      */
     private void readBoxesPokemon(byte[] saveData) throws IOException {
         int bank2Offset = 0x4000;
 
         int boxDiff;
 
-        if(japanese) {
+        if(language == Language.JAPANESE) {
         	boxDiff = 0x566;
         }
         else {
@@ -472,7 +516,7 @@ public class SaveFile {
                 System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
                 try {
-                    boxes[boxIndex][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                    boxes[boxIndex][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
                 } catch (IllegalArgumentException e) {
                     throw new IOException("illegal name : " + e.getMessage());
                 }
@@ -509,7 +553,7 @@ public class SaveFile {
                 System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
                 try {
-                    boxes[boxIndex + boxCount / 2][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, japanese);
+                    boxes[boxIndex + boxCount / 2][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
                 } catch (IllegalArgumentException e) {
                     throw new IOException("illegal name : " + e.getMessage());
                 }
@@ -523,10 +567,10 @@ public class SaveFile {
 
     /**
      * Write a Pokémon's data in the party.
-     * @param saveData -> the save file's raw data
-     * @param boxNumber -> the number of the box where the Pokémon must be placed (starts at 0)
-     * @param pokemonIndex -> the index where the Pokémon must be placed (starts at 0)
-     * @param pokemon -> the Pokémon to write
+     * @param saveData the save file's raw data
+     * @param boxNumber the number of the box where the Pokémon must be placed (starts at 0)
+     * @param pokemonIndex the index where the Pokémon must be placed (starts at 0)
+     * @param pokemon the Pokémon to write
      */
     private void writeBoxPokemon(byte[] saveData, int boxNumber, int pokemonIndex, Pokemon pokemon){
         int bankOffset = 0x4000;
@@ -536,7 +580,7 @@ public class SaveFile {
             boxNumber -= boxCount / 2;
         }
 
-        int boxDiff = japanese ? 0x566 : 0x462;
+        int boxDiff = language == Language.JAPANESE ? 0x566 : 0x462;
         int boxOffset = bankOffset + boxNumber * boxDiff;
         saveData[boxOffset + 1 + pokemonIndex] = (byte) pokemon.getIndexNumber();
 
@@ -554,9 +598,9 @@ public class SaveFile {
     }
 
     /**
-     * Returns if the save file is from a western game (i.e., english, french, german, spanish or italian).
-     * @param saveData -> the save file's raw data
-     * @return -> true if the save file is western, false otherwise
+     * Returns if the save file is from a western game (i.e., english, French, german, spanish or italian).
+     * @param saveData the save file's raw data
+     * @return true if the save file is western, false otherwise
      */
     public static boolean isWestern(byte[] saveData){
         return saveData[0x2F2C] <= 20 && Bytes.byteToUnsignedByte(saveData[0x2F2D + saveData[0x2F2C]]) == 0xFF &&
@@ -565,8 +609,8 @@ public class SaveFile {
 
     /**
      * Returns if the save file is from a japanese game.
-     * @param saveData -> the save file's raw data
-     * @return -> true if the save file is japanese, false otherwise
+     * @param saveData the save file's raw data
+     * @return true if the save file is japanese, false otherwise
      */
     public static boolean isJapanese(byte[] saveData){
         return saveData[0x2ED5] <= 30 && Bytes.byteToUnsignedByte(saveData[0x2ED6 + saveData[0x2ED5]]) == 0xFF &&

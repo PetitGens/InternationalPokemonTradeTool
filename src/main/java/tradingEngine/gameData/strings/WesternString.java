@@ -57,35 +57,23 @@ public class WesternString extends InGameString{
 
     @Override
     public void fromString(String string) {
-        //TODO build InGameString from regular String
-    }
-
-    /**
-     * Convert a hexadecimal encoded in-game string to a translated String
-     * @param hexString -> the encoded in-game string as a hexadecimal String
-     * @return the converted String
-     */
-    public static String hexToString(String hexString){
-        int stringLength = hexString.length();
-        if(stringLength % 2 != 0){
-            throw new IllegalArgumentException("hex string should have an even number of character");
+        if(string.length() > InGameString.MAX_SIZE - 1){
+            throw new IllegalArgumentException("string too long");
         }
+        if(string.length() == 0){
+            throw new IllegalArgumentException("string must not be empty");
+        }
+        char[] charArray = string.toCharArray();
 
-        StringBuilder returnString = new StringBuilder();
-
-        for(int i = 0; i < stringLength; i += 2){
-            String parsable = "0x" + hexString.substring(i, i + 2);
-            byte value = Integer.decode(parsable).byteValue();
-
-            InGameWesternCharacter westChar = InGameWesternCharacter.characterFromValue(value);
-
-            if(westChar == null){
-                throw new IllegalArgumentException("illegal character : " + parsable);
+        int i;
+        for( i = 0; i < string.length(); i++){
+            InGameWesternCharacter inGameCharacter = InGameWesternCharacter.fromRegularCharacter(charArray[i]);
+            if (inGameCharacter == null){
+                throw new IllegalArgumentException("illegal character in string");
             }
-
-            returnString.append(westChar.character);
+            array[i] = inGameCharacter.value;
         }
-
-        return returnString.toString();
+        length = i;
+        array[i] = InGameWesternCharacter.DELIMITER.value;
     }
 }

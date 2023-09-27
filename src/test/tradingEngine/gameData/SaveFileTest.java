@@ -1,23 +1,24 @@
 package test.tradingEngine.gameData;
 
+import main.java.tradingEngine.gameData.Language;
 import main.java.tradingEngine.gameData.Pokemon;
 import main.java.tradingEngine.gameData.SaveFile;
 import main.java.tradingEngine.gameData.Specie;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class SaveFileTest {
-    private static final String resourcesPath = "src/main/resources/tradingEngine/gameData/";
+public class SaveFileTest {
+    private static final String resourcesPath = "src/main/resources/tradingEngine/";
     
     @Test
-    void westernSaveTest() throws IOException {
-        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+    public void westernSaveTest() throws IOException {
+        Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
@@ -41,8 +42,8 @@ class SaveFileTest {
     }
 
     @Test
-    void japaneseSaveTest() throws IOException{
-        Files.copy(Path.of(resourcesPath + "jap.sav"), Path.of(resourcesPath + "copy_jap.sav"),
+    public void japaneseSaveTest() throws IOException{
+        Files.copy(Paths.get(resourcesPath + "jap.sav"), Paths.get(resourcesPath + "copy_jap.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         SaveFile saveFile = new SaveFile(resourcesPath + "copy_jap.sav");
@@ -60,25 +61,25 @@ class SaveFileTest {
     }
 
     @Test
-    void isWesternTest() throws IOException {
-        byte[] jap = Files.readAllBytes(Path.of(resourcesPath + "jap.sav"));
-        byte[] fr = Files.readAllBytes(Path.of(resourcesPath + "save.sav"));
+    public void isWesternTest() throws IOException {
+        byte[] jap = Files.readAllBytes(Paths.get(resourcesPath + "jap.sav"));
+        byte[] fr = Files.readAllBytes(Paths.get(resourcesPath + "save.sav"));
 
         assertTrue(SaveFile.isWestern(fr));
         assertFalse(SaveFile.isWestern(jap));
     }
 
     @Test
-    void isJapaneseTest() throws IOException {
-        byte[] jap = Files.readAllBytes(Path.of(resourcesPath + "jap.sav"));
-        byte[] fr = Files.readAllBytes(Path.of(resourcesPath + "save.sav"));
+    public void isJapaneseTest() throws IOException {
+        byte[] jap = Files.readAllBytes(Paths.get(resourcesPath + "jap.sav"));
+        byte[] fr = Files.readAllBytes(Paths.get(resourcesPath + "save.sav"));
 
         assertTrue(SaveFile.isJapanese(jap));
         assertFalse(SaveFile.isJapanese(fr));
     }
 
     @Test
-    void gettersExceptionsTest() throws IOException {
+    public void gettersExceptionsTest() throws IOException {
         SaveFile fr = new SaveFile(resourcesPath + "save.sav");
         SaveFile jap = new SaveFile(resourcesPath + "jap.sav");
 
@@ -110,8 +111,8 @@ class SaveFileTest {
     }
 
     @Test
-    void westernPartyPokemonWritingTest() throws IOException{
-    	Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+    public void westernPartyPokemonWritingTest() throws IOException{
+    	Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
@@ -122,7 +123,7 @@ class SaveFileTest {
                         (byte) 0x8E,
                         (byte) 0x83,
                         (byte) 0x8E,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInParty(4, newPartyPokemon);
 
@@ -136,8 +137,8 @@ class SaveFileTest {
     }
 
     @Test
-    void westernBoxPokemonWritingTest() throws IOException{
-        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+    public void westernBoxPokemonWritingTest() throws IOException{
+        Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
@@ -148,7 +149,7 @@ class SaveFileTest {
                         (byte) 0x84,
                         (byte) 0x80,
                         (byte) 0x85,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInBox(0, 3, newBoxPokemon);
 
@@ -162,8 +163,8 @@ class SaveFileTest {
     }
     
     @Test
-    void westernCurrentBoxPokemonWritingTest() throws IOException{
-        Files.copy(Path.of(resourcesPath + "save.sav"), Path.of(resourcesPath + "copy.sav"),
+    public void westernCurrentBoxPokemonWritingTest() throws IOException{
+        Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
         SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
@@ -174,7 +175,7 @@ class SaveFileTest {
                         (byte) 0x84,
                         (byte) 0x80,
                         (byte) 0x85,
-                }, false);
+                }, Language.WESTERN);
 
         saveFile.storePokemonInBox(1, 19, newBoxPokemon);
 

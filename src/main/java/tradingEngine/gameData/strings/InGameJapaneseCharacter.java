@@ -175,13 +175,27 @@ public enum InGameJapaneseCharacter {
 
     /**
      * Returns one of the enumeration's elements corresponding to a numeric value.
-     * @param value -> the value of the wanted character in the in-game encoding
+     * @param value the value of the wanted character in the in-game encoding
      * @return the corresponding enumeration element, null if none is found
      */
     public static InGameJapaneseCharacter characterFromValue(byte value){
         for(InGameJapaneseCharacter character : values()){
             if(character.value == value){
                 return character;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns one of the enumeration's elements corresponding to the specified regular character.
+     * @param character the regular character
+     * @return the corresponding in-game character
+     */
+    public static InGameJapaneseCharacter fromRegularCharacter(char character){
+        for(InGameJapaneseCharacter inGameCharacter : values()){
+            if(inGameCharacter.character == character){
+                return inGameCharacter;
             }
         }
         return null;

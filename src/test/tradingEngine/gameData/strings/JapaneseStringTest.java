@@ -2,14 +2,14 @@ package test.tradingEngine.gameData.strings;
 
 import main.java.tradingEngine.gameData.strings.InGameJapaneseCharacter;
 import main.java.tradingEngine.gameData.strings.JapaneseString;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class JapaneseStringTest {
+public class JapaneseStringTest {
 
     @Test
-    void addTest() {
+    public void addTest() {
         JapaneseString japaneseString = new JapaneseString();
         japaneseString.add(InGameJapaneseCharacter.KATAKANA_A.value);
 
@@ -20,7 +20,7 @@ class JapaneseStringTest {
     }
 
     @Test
-    void isCharacterValidTest() {
+    public void isCharacterValidTest() {
         JapaneseString japaneseString = new JapaneseString();
 
         assertTrue(japaneseString.isCharacterValid(InGameJapaneseCharacter.KATAKANA_A.value));
@@ -37,7 +37,7 @@ class JapaneseStringTest {
     }
 
     @Test
-    void addAll() {
+    public void addAll() {
         byte[] validArray = {
                 InGameJapaneseCharacter.KATAKANA_A.value,
                 InGameJapaneseCharacter.KATAKANA_I.value,
@@ -113,7 +113,7 @@ class JapaneseStringTest {
     }
 
     @Test
-    void removeTest() {
+    public void removeTest() {
         byte[] validArray = {
                 InGameJapaneseCharacter.KATAKANA_A.value,
                 InGameJapaneseCharacter.KATAKANA_I.value,
@@ -146,7 +146,7 @@ class JapaneseStringTest {
     }
 
     @Test
-    void setTest() {
+    public void setTest() {
         byte[] validArray = {
                 InGameJapaneseCharacter.KATAKANA_A.value,
                 InGameJapaneseCharacter.KATAKANA_I.value,
@@ -181,7 +181,7 @@ class JapaneseStringTest {
     }
 
     @Test
-    void toStringTest() {
+    public void toStringTest() {
         JapaneseString meowthName = new JapaneseString();
         byte[] meowthCharacters = {
                 InGameJapaneseCharacter.KATAKANA_NI.value,

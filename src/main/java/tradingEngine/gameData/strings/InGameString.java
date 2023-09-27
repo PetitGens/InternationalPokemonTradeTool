@@ -21,7 +21,7 @@ public abstract class InGameString {
 
     /**
      * Adds the specified encoded character to the string.
-     * @param character -> the character to add, in the right encoding depending on the game
+     * @param character the character to add, in the right encoding depending on the game
      * @throws IllegalArgumentException if the character is illegal for the game, or if there is no room for a new
      * character
      */
@@ -42,7 +42,7 @@ public abstract class InGameString {
 
     /**
      * Checks if the specified character is legal game-wise
-     * @param character -> the character to check, in its numeric value
+     * @param character the character to check, in its numeric value
      * @return true if the character is legal, false otherwise
      */
     public abstract boolean isCharacterValid(byte character);
@@ -53,13 +53,13 @@ public abstract class InGameString {
      * won't be written.
      * The method puts a delimiter after the written area, so this effectively erases all characters present
      * before the method call.
-     * @param array -> the array from which the characters are read
+     * @param array the array from which the characters are read
      */
     public abstract void addAll(byte[] array);
 
     /**
      * Removes the character at the specified index and shifts all the character after it.
-     * @param index -> the index where the character to remove is located
+     * @param index the index where the character to remove is located
      * @throws IllegalArgumentException if the specified index is out of bounds
      */
     public void remove(int index){
@@ -76,7 +76,7 @@ public abstract class InGameString {
 
     /**
      * Returns the character located at the specified index.
-     * @param index -> the index where the wanted character is located
+     * @param index the index where the wanted character is located
      * @return the character in question
      * @throws IllegalArgumentException if the index is out of bounds
      */
@@ -89,8 +89,8 @@ public abstract class InGameString {
 
     /**
      * Sets the character located at the specified index to the specified value
-     * @param character -> the value to write at the index location
-     * @param index -> the location of the character to write
+     * @param character the value to write at the index location
+     * @param index the location of the character to write
      * @throws IllegalArgumentException if the index is out of bounds, or if the specified character is illegal for the
      * game
      */
@@ -119,16 +119,16 @@ public abstract class InGameString {
     public abstract String toString();
 
     /**
-     * (currently unimplemented) Replaces all the string's characters from the regular Java String given as parameter
-     * @param string -> the String to read from
-     * @throws IllegalArgumentException if the given string contains characters, that aren't in the game
+     * Replaces all the string's characters from the regular Java String given as parameter
+     * @param string the String to read from
+     * @throws IllegalArgumentException if the given string contains characters that aren't in the game
      */
     public abstract void fromString(String string);
 
     /**
      * Returns the number of characters in the given array (excluding delimiter). It's mostly made for strings that
      * contain a 0x50 delimiter, as otherwise it just returns the length of the array.
-     * @param string -> An array of encoded characters that the method will count.
+     * @param string An array of encoded characters that the method will count.
      * @return the number of characters
      */
     public static int stringLength(byte[] string){
