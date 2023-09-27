@@ -327,7 +327,7 @@ public enum Specie {
     /**
      * Returns the specie's internal number in RBY. This is only exact for valid Gen1 Pokémon as Missingno sees its
      * index set to -1, because handling all the variants of Missingno is boring.
-     * @return -> the Gen1 index
+     * @return the Gen1 index
      */
     public int getGen1Index() {
         return gen1Index;
@@ -336,7 +336,7 @@ public enum Specie {
     /**
      * Returns the specie's internal number in GSC. This is only exact for valid Gen2 Pokémon as Missingno sees its
      * index set to -1, because handling all the variants of Missingno is boring.
-     * @return -> the Gen2 index
+     * @return the Gen2 index
      */
     public int getGen2Index() {
         return gen2Index;
@@ -344,7 +344,7 @@ public enum Specie {
 
     /**
      * Returns the specie's name in english.
-     * @return -> the english name
+     * @return the english name
      */
     public String getEnglishName() {
         return englishName;
@@ -352,7 +352,7 @@ public enum Specie {
 
     /**
      * Returns the specie's name in japanese.
-     * @return -> the japanese name
+     * @return the japanese name
      */
     public String getJapaneseName() {
         return japaneseName;
@@ -360,7 +360,7 @@ public enum Specie {
 
     /**
      * Returns the specie's name in French.
-     * @return -> the French name
+     * @return the French name
      */
     public String getFrenchName() {
         return frenchName;
@@ -368,7 +368,7 @@ public enum Specie {
 
     /**
      * Returns the specie's name in german.
-     * @return -> the german name
+     * @return the german name
      */
     public String getGermanName() {
         return germanName;
@@ -376,7 +376,7 @@ public enum Specie {
 
     /**
      * Returns the specie's name in korean.
-     * @return -> the korean name
+     * @return the korean name
      */
     public String getKoreanName() {
         return koreanName;
@@ -384,7 +384,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base HP stat.
-     * @return -> the specie's base HP
+     * @return the specie's base HP
      */
     public int getBaseHP() {
         return baseHP;
@@ -392,7 +392,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base attack stat.
-     * @return -> the specie's base attack
+     * @return the specie's base attack
      */
     public int getBaseAttack() {
         return baseAttack;
@@ -400,7 +400,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base defense stat.
-     * @return -> the specie's base defense
+     * @return the specie's base defense
      */
     public int getBaseDefense() {
         return baseDefense;
@@ -408,7 +408,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base speed stat.
-     * @return -> the specie's base speed
+     * @return the specie's base speed
      */
     public int getBaseSpeed() {
         return baseSpeed;
@@ -417,7 +417,7 @@ public enum Specie {
     /**
      * Returns the specie's base special stat. This stat only exists in Gen1 and was back then used as both Special
      * Attack and Special Defense
-     * @return -> the specie's base special
+     * @return the specie's base special
      */
     public int getBaseSpecial() {
         return baseSpecial;
@@ -425,7 +425,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base special attack stat. This stat only exists Gen2 onwards, replacing Gen1 special.
-     * @return -> the specie's base special attack
+     * @return the specie's base special attack
      */
     public int getBaseSpecialAttack() {
         return baseSpecialAttack;
@@ -433,7 +433,7 @@ public enum Specie {
 
     /**
      * Returns the specie's base special defense stat. This stat only exists Gen2 onwards, replacing Gen1 special.
-     * @return -> the specie's base special defense
+     * @return the specie's base special defense
      */
     public int getBaseSpecialDefense() {
         return baseSpecialDefense;
@@ -441,8 +441,8 @@ public enum Specie {
 
     /**
      * Returns the Pokémon name in the specified language.
-     * @param language -> the language the wanted name is in
-     * @return -> the required specie name
+     * @param language the language the wanted name is in
+     * @return the required specie name
      */
     public String getName(Language language){
         String specieName;
@@ -468,7 +468,7 @@ public enum Specie {
 
     /**
      * Returns the Specie corresponding to the given index number for a Gen1 Pokémon.
-     * @param index -> the index number of the wanted Specie
+     * @param index the index number of the wanted Specie
      * @return the corresponding Specie, or MISSINGNO if none was found
      */
     public static Specie specieFromGen1Index(int index){
@@ -483,7 +483,7 @@ public enum Specie {
 
     /**
      * Returns the Specie corresponding to the given index number for a Gen2 Pokémon.
-     * @param index -> the index number of the wanted Specie
+     * @param index the index number of the wanted Specie
      * @return the corresponding Specie, or MISSINGNO if none was found
      */
     public static Specie specieFromGen2Index(int index){

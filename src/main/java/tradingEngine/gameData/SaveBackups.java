@@ -11,18 +11,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Utility class use for backing up a save file upon loading it. It also permits to delete old unused backups.
+ * @author Julien Ait azzouzene
+ * @see SaveFile
+ */
 public abstract class SaveBackups {
+    private static final String BACKUP_DIRECTORY = "./backups/";
+    private static final Path BACKUP_PATH = Paths.get(BACKUP_DIRECTORY);
 
-    private static final String resourcesPath = "src/main/resources/tradingEngine/";
-
-    public static void main(String[] args) throws IOException {
-        SaveFile saveFile = new SaveFile(resourcesPath + "save.sav");
-        saveFile.backup();
-    }
-
-    public static final String BACKUP_DIRECTORY = "./backups/";
-    public static final Path BACKUP_PATH = Paths.get(BACKUP_DIRECTORY);
-
+    /**
+     * Backups a save file only if there isn't any file with identical name, checksum and trainer id.
+     * @param saveFile the save file that has to be backed up
+     * @throws IOException if any problem relating to the file system is encountered
+     * (like no permissions, or if a file named "backups" already exists)
+     */
     public static void backup(SaveFile saveFile) throws IOException {
         if(! Files.exists(BACKUP_PATH)){
             firstBackup(saveFile);
@@ -40,6 +43,10 @@ public abstract class SaveBackups {
         copySaveFile(saveFile, getCopyFileName(saveFile));
     }
 
+    /**
+     * Deletes all backups files in the "backups" folder that are older than 7 days.
+     * Keeps one file if there is no recent file for a particular save file.
+     */
     public static void deleteOldBackups(){
         if(! Files.exists(BACKUP_PATH) || ! (new File(BACKUP_DIRECTORY).isDirectory())){
             return;

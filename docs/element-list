@@ -1,0 +1,7 @@
+module:InternationalPokemonTradeTool
+main.java.tradingEngine
+main.java.tradingEngine.gameData
+main.java.tradingEngine.gameData.strings
+test.tradingEngine
+test.tradingEngine.gameData
+test.tradingEngine.gameData.strings

@@ -52,8 +52,8 @@ public class CLIApp {
 
     /**
      * Asks the user for the save file's path, and then tries to open and return it.
-     * @param i -> the save file's number, just for display (either 1 or 2)
-     * @return -> the just opened save file
+     * @param i the save file's number, just for display (either 1 or 2)
+     * @return the just opened save file
      */
     private static SaveFile saveFilePathInput(int i){
         SaveFile saveFile = null;
@@ -73,9 +73,9 @@ public class CLIApp {
 
     /**
      * Asks the user for the position of a Pokémon (either one number if it's in the party, or two if it's in a box).
-     * @param saveIndex -> the save file's number, just for display (either 1 or 2)
-     * @param saveFile -> the save file the Pokémon is located on
-     * @return -> an array of two integers : the first one is the Pokémon index, the second one is the box number or a
+     * @param saveIndex the save file's number, just for display (either 1 or 2)
+     * @param saveFile the save file the Pokémon is located on
+     * @return an array of two integers: the first one is the Pokémon index, the second one is the box number or a
      * negative number if the Pokémon is in the party
      */
     private static int[] inputPokemonPosition(int saveIndex, SaveFile saveFile){

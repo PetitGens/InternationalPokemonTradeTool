@@ -93,7 +93,7 @@ public enum InGameWesternCharacter {
 
     /**
      * Returns one of the enumeration's elements corresponding to a numeric value.
-     * @param value -> the value of the wanted character in the in-game encoding
+     * @param value the value of the wanted character in the in-game encoding
      * @return the corresponding enumeration element, null if none is found
      */
     public static InGameWesternCharacter characterFromValue(byte value){
@@ -107,8 +107,8 @@ public enum InGameWesternCharacter {
 
     /**
      * Returns one of the enumeration's elements corresponding to the specified regular character.
-     * @param character -> the regular character
-     * @return -> the corresponding in-game character
+     * @param character the regular character
+     * @return the corresponding in-game character
      */
     public static InGameWesternCharacter fromRegularCharacter(char character){
         for(InGameWesternCharacter inGameCharacter : values()){
