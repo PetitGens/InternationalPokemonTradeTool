@@ -64,7 +64,7 @@ public class CLIApp {
                 saveFile = new SaveFile(path);
             }
             catch (IOException ioException){
-                System.out.println("Invalid save file !\nReason : " + ioException.getMessage());
+                System.out.println("Invalid save file !\nReason : " + ioException);
             }
         } while(saveFile == null);
 
