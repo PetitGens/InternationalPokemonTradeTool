@@ -69,11 +69,11 @@ public class Trade {
     public void openSaveFile(int index, String path) throws IOException {
         switch (index) {
             case 0:
-                saveFile1 = new SaveFile(path);
+                saveFile1 = SaveFile.openSaveFile(path);
                 saveFile1.backup();
                 break;
             case 1:
-                saveFile2 = new SaveFile(path);
+                saveFile2 = SaveFile.openSaveFile(path);
                 saveFile2.backup();
                 break;
             default:

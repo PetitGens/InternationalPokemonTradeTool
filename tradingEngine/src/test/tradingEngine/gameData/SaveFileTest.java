@@ -21,7 +21,7 @@ public class SaveFileTest {
         Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         assertEquals(5, saveFile.getPartyLength());
 
@@ -46,7 +46,7 @@ public class SaveFileTest {
         Files.copy(Paths.get(resourcesPath + "jap.sav"), Paths.get(resourcesPath + "copy_jap.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        SaveFile saveFile = new SaveFile(resourcesPath + "copy_jap.sav");
+        SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy_jap.sav");
 
         assertEquals(6, saveFile.getPartyLength());
 
@@ -61,27 +61,9 @@ public class SaveFileTest {
     }
 
     @Test
-    public void isWesternTest() throws IOException {
-        byte[] jap = Files.readAllBytes(Paths.get(resourcesPath + "jap.sav"));
-        byte[] fr = Files.readAllBytes(Paths.get(resourcesPath + "save.sav"));
-
-        assertTrue(SaveFile.isWestern(fr));
-        assertFalse(SaveFile.isWestern(jap));
-    }
-
-    @Test
-    public void isJapaneseTest() throws IOException {
-        byte[] jap = Files.readAllBytes(Paths.get(resourcesPath + "jap.sav"));
-        byte[] fr = Files.readAllBytes(Paths.get(resourcesPath + "save.sav"));
-
-        assertTrue(SaveFile.isJapanese(jap));
-        assertFalse(SaveFile.isJapanese(fr));
-    }
-
-    @Test
     public void gettersExceptionsTest() throws IOException {
-        SaveFile fr = new SaveFile(resourcesPath + "save.sav");
-        SaveFile jap = new SaveFile(resourcesPath + "jap.sav");
+        SaveFile fr = SaveFile.openSaveFile(resourcesPath + "save.sav");
+        SaveFile jap = SaveFile.openSaveFile(resourcesPath + "jap.sav");
 
         assertThrows(IllegalArgumentException.class, () -> fr.getPartyPokemon(-1));
         assertThrows(IllegalArgumentException.class, () -> fr.getPartyPokemon(6));
@@ -115,7 +97,7 @@ public class SaveFileTest {
     	Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
         
         Pokemon newPartyPokemon = new Pokemon(PokemonTest.boxPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
@@ -127,7 +109,7 @@ public class SaveFileTest {
 
         saveFile.storePokemonInParty(4, newPartyPokemon);
 
-        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile2 = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         Pokemon storedPokemon = saveFile2.getPartyPokemon(4);
 
@@ -141,7 +123,7 @@ public class SaveFileTest {
         Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
@@ -153,7 +135,7 @@ public class SaveFileTest {
 
         saveFile.storePokemonInBox(0, 3, newBoxPokemon);
 
-        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile2 = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         Pokemon storedPokemon = saveFile2.getBoxPokemon(0, 3);
 
@@ -167,7 +149,7 @@ public class SaveFileTest {
         Files.copy(Paths.get(resourcesPath + "save.sav"), Paths.get(resourcesPath + "copy.sav"),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        SaveFile saveFile = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
@@ -179,7 +161,7 @@ public class SaveFileTest {
 
         saveFile.storePokemonInBox(1, 19, newBoxPokemon);
 
-        SaveFile saveFile2 = new SaveFile(resourcesPath + "copy.sav");
+        SaveFile saveFile2 = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
         Pokemon storedPokemon = saveFile2.getBoxPokemon(1, 19);
 

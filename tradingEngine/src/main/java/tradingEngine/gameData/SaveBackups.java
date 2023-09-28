@@ -125,7 +125,7 @@ public abstract class SaveBackups {
             String saveFileName = saveFile.getPath().substring(saveFile.getPath().lastIndexOf('/') + 1);
 
             if(saveFileName.equals(baseName + extension)){
-                SaveFile backupFile = new SaveFile(BACKUP_DIRECTORY + fileName);
+                SaveFile backupFile = SaveFile.openSaveFile(BACKUP_DIRECTORY + fileName);
                 if(backupFile.getChecksum() == saveFile.getChecksum()
                     && backupFile.getTrainerId() == saveFile.getTrainerId()){
                     return true;
