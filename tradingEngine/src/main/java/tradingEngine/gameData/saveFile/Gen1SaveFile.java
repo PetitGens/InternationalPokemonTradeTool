@@ -1,11 +1,16 @@
-package main.java.tradingEngine.gameData;
+package main.java.tradingEngine.gameData.saveFile;
 
+import main.java.tradingEngine.gameData.Bytes;
+import main.java.tradingEngine.gameData.Language;
+import main.java.tradingEngine.gameData.pokemon.Gen1Pokemon;
+import main.java.tradingEngine.gameData.pokemon.Gen1PokemonFactory;
+import main.java.tradingEngine.gameData.pokemon.Pokemon;
 import main.java.tradingEngine.gameData.strings.JapaneseString;
 import main.java.tradingEngine.gameData.strings.WesternString;
 
 import java.io.IOException;
 
-public class Gen1SaveFile extends SaveFile{
+public class Gen1SaveFile extends SaveFile {
 
     Gen1SaveFile(String path, byte[] saveData) throws IOException {
         this.path = path;
@@ -27,6 +32,9 @@ public class Gen1SaveFile extends SaveFile{
         if(! verifyChecksum(saveData)){
             throw new IOException("invalid checksum");
         }
+
+        pokemonFactory = new Gen1PokemonFactory();
+        blankSpace = Gen1Pokemon.BLANK_SPACE;
 
         int partyOffset;
         int currentBoxNumberOffset;

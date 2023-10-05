@@ -1,9 +1,10 @@
 package test.tradingEngine.gameData;
 
 import main.java.tradingEngine.gameData.Language;
-import main.java.tradingEngine.gameData.Pokemon;
-import main.java.tradingEngine.gameData.SaveFile;
-import main.java.tradingEngine.gameData.Specie;
+import main.java.tradingEngine.gameData.pokemon.Gen1Pokemon;
+import main.java.tradingEngine.gameData.pokemon.Pokemon;
+import main.java.tradingEngine.gameData.saveFile.SaveFile;
+import main.java.tradingEngine.gameData.pokemon.Specie;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -99,7 +100,7 @@ public class SaveFileTest {
 
         SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
         
-        Pokemon newPartyPokemon = new Pokemon(PokemonTest.boxPokemonData(), new byte[]{(byte)0x80},
+        Pokemon newPartyPokemon = new Gen1Pokemon(PokemonTest.boxPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
                         (byte) 0x83,
                         (byte) 0x8E,
@@ -125,7 +126,7 @@ public class SaveFileTest {
 
         SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
-        Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
+        Pokemon newBoxPokemon = new Gen1Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
                         (byte) 0x8B,
                         (byte) 0x84,
@@ -151,7 +152,7 @@ public class SaveFileTest {
 
         SaveFile saveFile = SaveFile.openSaveFile(resourcesPath + "copy.sav");
 
-        Pokemon newBoxPokemon = new Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
+        Pokemon newBoxPokemon = new Gen1Pokemon(PokemonTest.partyPokemonData(), new byte[]{(byte)0x80},
                 new byte[]{
                         (byte) 0x8B,
                         (byte) 0x84,

@@ -1,4 +1,6 @@
-package main.java.tradingEngine.gameData;
+package main.java.tradingEngine.gameData.saveFile;
+
+import main.java.tradingEngine.gameData.saveFile.SaveFile;
 
 import java.io.File;
 import java.io.IOException;

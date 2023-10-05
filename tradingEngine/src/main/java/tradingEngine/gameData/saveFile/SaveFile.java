@@ -1,5 +1,9 @@
-package main.java.tradingEngine.gameData;
+package main.java.tradingEngine.gameData.saveFile;
 
+import main.java.tradingEngine.gameData.*;
+import main.java.tradingEngine.gameData.pokemon.Pokemon;
+import main.java.tradingEngine.gameData.pokemon.PokemonFactory;
+import main.java.tradingEngine.gameData.pokemon.Specie;
 import main.java.tradingEngine.gameData.strings.InGameString;
 
 import java.io.IOException;
@@ -14,6 +18,8 @@ import java.nio.file.Paths;
  */
 public abstract class SaveFile {
     protected String path;
+    
+    protected PokemonFactory pokemonFactory;
 
     private final Pokemon[] party = new Pokemon[6];
 
@@ -26,6 +32,8 @@ public abstract class SaveFile {
     protected int boxCount;
 
     protected int currentBox;
+    
+    protected Pokemon blankSpace;
 
     protected int nameLength;
 
@@ -263,7 +271,7 @@ public abstract class SaveFile {
             System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
             try{
-                party[i] = new Pokemon(pokemonData, trainerName, nickname, language);
+                party[i] = pokemonFactory.newPokemon(pokemonData, trainerName, nickname, language);
             }
             catch(IllegalArgumentException e){
                 throw new IOException("illegal name : " + e.getMessage());
@@ -275,7 +283,7 @@ public abstract class SaveFile {
         }
 
         for(int i = partyLength; i < 6; i++){
-            party[i] = Pokemon.BLANK_SPACE;
+            party[i] = blankSpace;
         }
     }
 
@@ -314,14 +322,14 @@ public abstract class SaveFile {
             System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
             try {
-                boxes[currentBox][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
+                boxes[currentBox][pokemonIndex] = pokemonFactory.newPokemon(pokemonData, trainerName, nickname, language);
             } catch (IllegalArgumentException e) {
                 throw new IOException("illegal name : " + e.getMessage());
             }
         }
 
         for(int i = pokemonCount; i < boxSize; i++){
-            boxes[currentBox][i] = Pokemon.BLANK_SPACE;
+            boxes[currentBox][i] = blankSpace;
         }
     }
 
@@ -378,14 +386,14 @@ public abstract class SaveFile {
                 System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
                 try {
-                    boxes[boxIndex][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
+                    boxes[boxIndex][pokemonIndex] = pokemonFactory.newPokemon(pokemonData, trainerName, nickname, language);
                 } catch (IllegalArgumentException e) {
                     throw new IOException("illegal name : " + e.getMessage());
                 }
             }
 
             for(int i = pokemonCount; i < boxSize; i++){
-                boxes[boxIndex][i] = Pokemon.BLANK_SPACE;
+                boxes[boxIndex][i] = blankSpace;
             }
         }
 
@@ -415,14 +423,14 @@ public abstract class SaveFile {
                 System.arraycopy(saveData, nicknameOffset, nickname, 0, nameLength);
 
                 try {
-                    boxes[boxIndex + boxCount / 2][pokemonIndex] = new Pokemon(pokemonData, trainerName, nickname, language);
+                    boxes[boxIndex + boxCount / 2][pokemonIndex] = pokemonFactory.newPokemon(pokemonData, trainerName, nickname, language);
                 } catch (IllegalArgumentException e) {
                     throw new IOException("illegal name : " + e.getMessage());
                 }
             }
 
             for(int i = pokemonCount; i < boxSize; i++){
-                boxes[boxIndex + boxCount / 2][i] = Pokemon.BLANK_SPACE;
+                boxes[boxIndex + boxCount / 2][i] = blankSpace;
             }
         }
     }

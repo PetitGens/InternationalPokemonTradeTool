@@ -6,4 +6,6 @@ module tradingEngine {
     exports test.tradingEngine.gameData;
     exports test.tradingEngine.gameData.strings;
     exports test.tradingEngine;
+    exports main.java.tradingEngine.gameData.saveFile;
+    exports main.java.tradingEngine.gameData.pokemon;
 }

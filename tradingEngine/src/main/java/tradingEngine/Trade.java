@@ -1,9 +1,9 @@
 package main.java.tradingEngine;
 
 import main.java.tradingEngine.gameData.Language;
-import main.java.tradingEngine.gameData.Pokemon;
-import main.java.tradingEngine.gameData.SaveFile;
-import main.java.tradingEngine.gameData.Specie;
+import main.java.tradingEngine.gameData.pokemon.Pokemon;
+import main.java.tradingEngine.gameData.saveFile.SaveFile;
+import main.java.tradingEngine.gameData.pokemon.Specie;
 
 import java.io.IOException;
 

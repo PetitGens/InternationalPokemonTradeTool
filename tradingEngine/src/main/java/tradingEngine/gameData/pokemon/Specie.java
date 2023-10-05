@@ -1,4 +1,6 @@
-package main.java.tradingEngine.gameData;
+package main.java.tradingEngine.gameData.pokemon;
+
+import main.java.tradingEngine.gameData.Language;
 
 /**
  * An enumeration used to store information about every Pokémon, like their index number of name in each language.
